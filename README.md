@@ -1,2 +1,3 @@
-# digits-recognition
+# Digits Recognition
+
 Project: Digits Recognition
