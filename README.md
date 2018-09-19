@@ -1,3 +1,3 @@
-# Digits Recognition
+# Digit Recognition
 
-Project: Digits Recognition
+Project: Digit Recognition
