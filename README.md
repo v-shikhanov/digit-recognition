@@ -1,5 +1,5 @@
 # Digit Recognition
 
 Project: Digit Recognition
-
-Go to the *src* directory, change *Main.java* and put your *.java* file(s) in it.
+Project for work with machine learning
+Use neural networks to recognize handwritten digits from 0 to 9.
