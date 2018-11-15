@@ -8,17 +8,7 @@
  *
  * @authors Vladislav Shikhanov
  *
- *			 _|__|__|__|_
- *			|			 |
- *		  --|	   		 |--
- *		  --|	 MOVE	 |--
- *		  --|  creative	 |--
- *		  --|	   		 |--
- *			|____________|
- *			  |	 |  |  |
- *
  *		  http://move-llc.ru
- *
  ************************************************************************************/
 package digitRecognition;
 
@@ -35,7 +25,14 @@ class ErrorFunction {
     private ReadIDX readIDX = new ReadIDX();
     private ImagesByClass imagesByClass = new ImagesByClass();
 
-
+    /********************************************************************************
+     *
+     * accordanceAnalyse Method checks all collections with drawings to accordance
+     * assigned images to real values
+     *
+     * @param imagesByClass is compilation of collection of numbers (collection with
+     *                      drawings of 0, of 1 etc)
+     *******************************************************************************/
     void accordanceAnalyse(ImagesByClass imagesByClass) {
         for ( int i = 0; i < 10; i++) {
             Double errors = 0.0;
@@ -104,10 +101,13 @@ class ErrorFunction {
 
     /********************************************************************************
      *
-     * randomClassifier Method  assigns random image from test collection
-     * to class from zero  to nine
+     * errorFunction Method checks the collection and compare label of picture and
+     * it accordance to the collection. For example if in collection with drawings of
+     * number five would found the image labled as 3- it'll means error.
      *
-     * @return result - true if ok, false if something goes wrong
+     * @param col collection which should be checked
+     * @param realValue is value of label which should be at collection
+     * @return  errorsRate in %
      *******************************************************************************/
     double errorFunction(ArrayList<ImageIDX> col, int realValue) {
         double errors = 0;
@@ -136,7 +136,7 @@ class ErrorFunction {
      * randomClassifier Method  assigns random image from test collection
      * to class from zero  to nine
      *
-     * @return boolean result - true if ok, false if something goes wrong
+     * @return  result - true if ok, false if something goes wrong
      *******************************************************************************/
     boolean randomClassifier() {
         for (ImageIDX aTestCol : testCol) {
