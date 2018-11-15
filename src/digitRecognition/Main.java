@@ -2,6 +2,9 @@ package digitRecognition;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.print("Hello world!");
+        ReadIDX readIDX = new ReadIDX();
+        ErrorFunction errorFunction = new ErrorFunction();
+        readIDX.getImages(false, true);
+        errorFunction.randomClassifier();
     }
 }
