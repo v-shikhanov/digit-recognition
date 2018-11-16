@@ -270,11 +270,11 @@ class ReadIDX {
        for(int i = 0; i < col.size(); i++) {
            System.out.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
            System.out.print(col.get(i).label);
-           for (int r = 0; r < 28; r++) {
-               int s = 0;
+           for (int s = 0; s < 28; s++) {
+               int r = 0;
                System.out.print("\n");
-               for (; s < 28; s++) {
-                   if (col.get(i).pixel[r][s] > 0) {
+               for (; r < 28; r++) {
+                   if (col.get(i).pixel[s][r] > 0) {
                        System.out.print("*");
                    } else {
                        System.out.print(" ");

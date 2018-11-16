@@ -11,7 +11,7 @@
  ************************************************************************************/
 
 package digitRecognition;
-
+import static digitRecognition.ReadIDX.testCol;
 public class Main {
 
     /********************************************************************************
@@ -22,7 +22,16 @@ public class Main {
     public static void main(String[] args) {
         ReadIDX readIDX = new ReadIDX();
         ErrorFunction errorFunction = new ErrorFunction();
+        SortByKNN sortByKNN = new SortByKNN();
+
+
         readIDX.getImages(false, true);
-        errorFunction.randomClassifier();
+
+        sortByKNN.findKNN(testCol.get(4), 5, 18,18, 200, 2);
+
+       // errorFunction.randomClassifier();
+
+
+
     }
 }
