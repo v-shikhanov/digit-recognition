@@ -50,15 +50,17 @@ public class SortByKNN {
      *                  if shadeCoef = 3, method will firstly find 6 neighbors and form
      *                  them it will sort k with nearest shade value. For smart search.
      *
-     * @return coordinates of nearest pixels
+     * @return average Euclide distance to k nearest pixels sorted by shade value
      ************************************************************************************/
-    ArrayList<Neighbour> findKNN (ImageIDX comparedImg, int k,  int sInit, int rInit, int shadeVal, double shadeCoef) {
+    int findKNN (ImageIDX comparedImg, int k,  int sInit, int rInit, int shadeVal, double shadeCoef) {
 
-        ArrayList<Neighbour> neighbors= new ArrayList<>();
+        ArrayList<Neighbour> neighbours= new ArrayList<>();
+        Neighbour referencePixel = new Neighbour(shadeVal,1000);
         Coordinate coordinate = new Coordinate(sInit, rInit);
         componentsForSearching.steps = 0;
         componentsForSearching.goal= 0;
         componentsForSearching.searchIsOver = false;  //reset at start of new searching
+        componentsForSearching.searchingDirection = 0;  //to the start position
 
         int euclidianDist = 0;
         /*
@@ -71,41 +73,28 @@ public class SortByKNN {
         if (n > 783 ) {
             n = 783;
         }
+        neighbours.add(referencePixel);
 
         for ( int i = 0; i < (int)n; ){
-            componentsForSearching.searchingDirection = 0;  //to the start position
             if (comparedImg.pixel[coordinate.s][coordinate.r] > 0) {
                 euclidianDist = Math.abs(coordinate.s- sInit) + Math.abs(coordinate.r-rInit) ;
                 Neighbour neighbour = new Neighbour(comparedImg.pixel[coordinate.s][coordinate.r], euclidianDist);
-                neighbors.add(neighbour); //Neighbor found
+                neighbours.add(neighbour); //Neighbor found
                 i++;
-            } else {
-                coordinate = selectPixel(coordinate);
-                if ( componentsForSearching.searchIsOver ) {
-                    System.out.println("Were found less neighbors then requested" + neighbors.size());
-                    break;
-                }
+            } coordinate = selectPixel(coordinate);
+
+            if ( componentsForSearching.searchIsOver ) {
+                System.out.println("Were found less neighbors then requested" + neighbours.size());
+                return 50000;
             }
         }
 
-        for ( int i = 0; i< neighbors.size(); i++)   {
-            System.out.println("Neighbors before sort. Shade: " + neighbors.get(i).shade
-                    + " Euclidian distance" + neighbors.get(i).euclidianDist);
+        Collections.sort(neighbours, new NeighborsComparator());
 
-        }
+        ArrayList<Integer> dist = new ArrayList<>();
+        neighbours.indexOf(referencePixel);
 
-
-        System.out.println( "\n \n \n ");
-
-        Collections.sort(neighbors, new NeighborsComparator());
-
-        for ( int i = 0; i< neighbors.size(); i++)   {
-            System.out.println("Neighbors after sort. Shade: " + neighbors.get(i).shade
-                    + " Euclidian distance" + neighbors.get(i).euclidianDist);
-
-        }
-
-        return neighbors;
+        return 2;
     }
 
 

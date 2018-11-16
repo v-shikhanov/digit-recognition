@@ -27,7 +27,7 @@ public class Main {
 
         readIDX.getImages(false, true);
 
-        sortByKNN.findKNN(testCol.get(4), 5, 18,18, 200, 2);
+        sortByKNN.findKNN(testCol.get(4), 5, 14,14, 220, 1.5);
 
        // errorFunction.randomClassifier();
 

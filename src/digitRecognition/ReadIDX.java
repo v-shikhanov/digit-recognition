@@ -87,8 +87,8 @@ class ReadIDX {
     String getFolderPath(boolean useStandardPath){
         Scanner sc = new Scanner(System.in);
         String path = new String();
-        String standardPath = "D:\\GIT\\java\\digit-recognition\\images";
-
+        String standardPath = "C:\\java_learn\\digit-recognition\\images";
+        //String standardPath = "D:\\GIT\\java\\digit-recognition\\images";
         if ( useStandardPath ){
             return standardPath;
         }
