@@ -303,6 +303,7 @@ class ReadIDX {
      *              pixel 0 = white, 255 = black
      *******************************************************************************/
     static class ImageIDX {
+        double rate;
         int label;
         int[][] pixel = new int[28][28];
         ImageIDX (int label){

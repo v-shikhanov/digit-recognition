@@ -26,12 +26,6 @@ public class Main {
 
 
         readIDX.getImages(false, true);
-
-        sortByKNN.findKNN(testCol.get(4), 5, 14,14, 220, 1.5);
-
-       // errorFunction.randomClassifier();
-
-
-
+        sortByKNN.getBestSearchingParameters(testCol.get(5), testCol, 500);
     }
 }
