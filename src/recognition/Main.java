@@ -10,10 +10,10 @@
  *		  http://move-llc.ru
  ************************************************************************************/
 
-package digitRecognition;
-import digitRecognition.simplestNeuron.ImagesManager;
+package recognition;
 
-import static digitRecognition.ReadIDX.testCol;
+import recognition.simplestNeuron.ImagesManager;
+
 public class Main {
 
     /********************************************************************************

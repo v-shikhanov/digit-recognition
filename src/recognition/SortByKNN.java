@@ -8,11 +8,11 @@
  *		  http://move-llc.ru
  ************************************************************************************/
 
-package digitRecognition;
+package recognition;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static digitRecognition.ReadIDX.ImageIDX;
+import static recognition.ReadIDX.ImageIDX;
 
 public class SortByKNN {
 

@@ -10,7 +10,7 @@
  *		  http://move-llc.ru
  *****************************************************************************/
 
-package digitRecognition;
+package recognition;
 
 import java.io.*;
 import java.util.ArrayList;

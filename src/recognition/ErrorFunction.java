@@ -10,15 +10,15 @@
  *
  *		  http://move-llc.ru
  ************************************************************************************/
-package digitRecognition;
+package recognition;
 
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static digitRecognition.ReadIDX.ImageIDX;
-import static digitRecognition.ReadIDX.testCol;
+import static recognition.ReadIDX.ImageIDX;
+import static recognition.ReadIDX.testCol;
 
 class ErrorFunction {
     /*********************** Collections with images definition*********************/
