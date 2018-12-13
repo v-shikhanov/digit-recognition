@@ -1,4 +1,4 @@
-package digitRecognition.simplestNeuron;
+package recognition.simplestNeuron;
 
 import java.util.Random;
 import java.util.Scanner;

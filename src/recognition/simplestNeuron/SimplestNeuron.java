@@ -1,4 +1,4 @@
-package digitRecognition.simplestNeuron;
+package recognition.simplestNeuron;
 
 /**
  * This class implements simplest neuron for recognize 1 or 0 written in 3*3 matrix
