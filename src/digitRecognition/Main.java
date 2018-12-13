@@ -11,6 +11,8 @@
  ************************************************************************************/
 
 package digitRecognition;
+import digitRecognition.simplestNeuron.ImagesManager;
+
 import static digitRecognition.ReadIDX.testCol;
 public class Main {
 
@@ -20,12 +22,8 @@ public class Main {
      *
      *******************************************************************************/
     public static void main(String[] args) {
-        ReadIDX readIDX = new ReadIDX();
-        ErrorFunction errorFunction = new ErrorFunction();
-        SortByKNN sortByKNN = new SortByKNN();
-
-
-        readIDX.getImages(false, true);
-        sortByKNN.getBestSearchingParameters(testCol.get(5), testCol, 500);
+        while (true) {
+            new ImagesManager().selectEnteringMethod();
+        }
     }
 }
