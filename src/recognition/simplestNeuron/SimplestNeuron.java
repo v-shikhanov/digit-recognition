@@ -1,39 +1,38 @@
 package recognition.simplestNeuron;
 
 /**
- * This class implements simplest neuron for recognize 1 or 0 written in 3*3 matrix
+ * This class implements simplest neuron for recognize 0 to 9 digits written in 3*5 matrix
  */
 public class SimplestNeuron {
     /**
      * pre defined weight coefficients for simplest neuron
      */
-    private final int[][] weight = {{2,1,2},{4,-4,4},{2,-1,2}};
-    private final int bias = -5;
+    private int[] weight;
+    private int bias ;
 
+    public SimplestNeuron(int[] weight, int bias) {
+        this.weight = weight;
+        this.bias = bias;
+    }
     /**
-     * Output Neuron implementation for defining one or zero on picture
-     * @param inputNeurons 9 cell matrix
-     * @return 1 if number is 1, 0 if 0;
+     * Output Neuron implementation for defining numbers from 0 to 9 on picture
+     * @param inputNeurons 15 cell array
+     * @return output Neuron value
      */
-    public int outputNeuron(int[][] inputNeurons) {
+    public int outputNeuron(int[] inputNeurons) {
         int outputNeuron = 0;
 
-        if (inputNeurons.length != 3) {
-            return -1;
+        if (inputNeurons.length != weight.length) {
+            System.out.println("Incorrect input neurons matrix size");
+            return -100;
         }
 
-        for (int string = 0; string < 3; string++) {
-            for (int row = 0; row < 3; row++) {
-                outputNeuron += inputNeurons[string][row] * weight[string][row];
-            }
+        for (int i = 0; i < 15; i++) {
+            outputNeuron += inputNeurons[i]*weight[i];
         }
 
         outputNeuron += bias;
 
-        if (outputNeuron > 0) {
-           return 0;
-        } else {
-           return 1;
-        }
+        return outputNeuron;
     }
 }
