@@ -185,8 +185,8 @@ public class ImagesManager {
     }
 
     private void digitRecognize(int[] inputNeurons) {
-        int result;
-        int bestResult = -1000;
+        double result;
+        double bestResult = -1000;
         int recognizedDigit =0;
         OutputNeuronsCollection outputNeuronsCollection = new OutputNeuronsCollection();
 
