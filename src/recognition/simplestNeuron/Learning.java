@@ -1,9 +1,7 @@
 package recognition.simplestNeuron;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Learning {
+    private double[][] deltaWeights = new double[10][15];
     private final int[][] learningImages = {
             {
                     1,1,1,
@@ -62,7 +60,7 @@ public class Learning {
                     0,0,1
             },
             {
-                    1, 1, 1,
+                    1,1,1,
                     1,0,1,
                     1,1,1,
                     1,0,1,
@@ -77,17 +75,12 @@ public class Learning {
             }
     };
 
-    private SimplestNeuron[] outputNeurons = new SimplestNeuron[10];
-    private double[][] deltaWeights = new double[10][15];
+
 
     public Learning () {
-        for (int i =0; i < 10; i++) {
-            outputNeurons[i] = new SimplestNeuron();
-        }
-        correctWeights();
     }
 
-    public void  correctWeights(){
+    public SimplestNeuron[] correctWeights(SimplestNeuron[] outputNeurons){
         for (int outNeuronIndex = 0; outNeuronIndex < 10; outNeuronIndex++) {
             for (int imageNumber = 0; imageNumber < 10; imageNumber++) {
                 double sigma = countSigmoidFunction(outputNeurons[outNeuronIndex], learningImages[imageNumber]);
@@ -115,6 +108,7 @@ public class Learning {
                 outputNeurons[outNeuronIndex].setWeight(pixelNumber, newWeight);
             }
         }
+        return outputNeurons;
     }
 
     public double countSigmoidFunction(SimplestNeuron n, int[] inputNeurons){
@@ -124,9 +118,5 @@ public class Learning {
     private double foundDeltaWight(int imageNumber, int pixelNumber, int idealValue, double sigma) {
         double educationSpeed = 0.5;
         return educationSpeed * learningImages[imageNumber][pixelNumber]*(idealValue - sigma);
-    }
-
-    public SimplestNeuron[] getOutNeurons() {
-        return outputNeurons;
     }
 }

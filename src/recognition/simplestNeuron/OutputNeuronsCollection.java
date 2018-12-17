@@ -1,28 +1,70 @@
 package recognition.simplestNeuron;
 
 
-public class OutputNeuronsCollection {
+import java.io.*;
 
-    private final double[][] weight = {
-            {1,1,1, 1,-1,1, 1,-1,1, 1,-1,1, 1,1,1}, //0
-            {-1,1,-1, -1,1,-1, -1,1,-1, -1,1,-1, -1,1,-1},//1
-            {1,1,1, -1,-1,1, 1,1,1, 1,-1,-1, 1,1,1},//2
-            {1,1,1, -1,-1,1, 1,1,1, -1,-1,1, 1,1,1},//3
-            {1,-1,1, 1,-1,1, 1,1,1, -1,-1,1, -1,-1,1},//4
-            {1,1,1, 1,-1,-1, 1,1,1, -1,-1,1, 1,1,1},//5
-            {1,1,1, 1,-1,-1, 1,1,1, 1,-1,1, 1,1,1},//6
-            {1,1,1, -1,-1,1, -1,-1,1, -1,-1,1, -1,-1,1},//7
-            {1,1,1, 1,-1,1, 1,1,1, 1,-1,1, 1,1,1,},//8
-            {1,1,1, 1,-1,1, 1,1,1, -1,-1,1, 1,1,1,}//9
-    };
-
-    private final int[] bias = {-1,6,0,0,4,0,-1,4,-2,-1};
-
-    public SimplestNeuron[] neurons = new SimplestNeuron[15];
+public class OutputNeuronsCollection implements Serializable {
+    private static final long serialVersionUID = 123L;
+    private SimplestNeuron[] outputNeurons = new SimplestNeuron[10];
 
     public OutputNeuronsCollection() {
-        for (int i =0; i < 10; i++) {
-            neurons[i] = new SimplestNeuron(weight[i],bias[i]);
+        File savedNeurons = new File("neurons.tmp");
+        if (!savedNeurons.isFile()) {
+            for (int i =0; i < 10; i++) {
+                outputNeurons[i] = new SimplestNeuron();
+            }
+            return;
+        }
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(savedNeurons);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            outputNeurons = (SimplestNeuron[])objectInputStream.readObject();
+            System.out.println("\nNeurons are load from file");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void learnNeurons() {
+        outputNeurons = new Learning().correctWeights(outputNeurons);
+        save();
+
+    }
+
+    public void save() {
+        File savedNeurons = new File("neurons.tmp");
+        if (!savedNeurons.isFile()) {
+            try {
+                savedNeurons.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("\nFile creation is impossible!");
+                return;
+            }
+        }
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(savedNeurons);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+            objectOutputStream.writeObject(outputNeurons);
+            objectOutputStream.close();
+            System.out.println("Neurons saved to file");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    public SimplestNeuron[] getOutputNeurons() {
+        return outputNeurons;
+    }
+
+
+
 }

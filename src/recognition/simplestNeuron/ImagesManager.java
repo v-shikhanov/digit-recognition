@@ -5,23 +5,26 @@ import java.util.Scanner;
 
 public class ImagesManager {
     private Scanner scanner = new Scanner(System.in);
-    public  Learning learning = new Learning();
+    private OutputNeuronsCollection neurons = new OutputNeuronsCollection();
+
+    private int selectedImage;
 
     public void selectEnteringMethod() {
 
         char[] image = new char[15];
         int enteringMethod = -1;
-        while (enteringMethod < 0 || enteringMethod >3) {
-            System.out.println("Please select entering method: " +
+        while (enteringMethod < 0 || enteringMethod > 3) {
+            System.out.println("\n\nPlease select operation: " +
                     "\n0 = manual image entering,\n" +
                     "1 = random generator,\n" +
-                    "2 = pre-defined images");
+                    "2 = pre-defined images \n" +
+                    "3 = Self learning mode with pre-defined images\n"
+            );
             if (scanner.hasNextInt()) {
                 enteringMethod = scanner.nextInt();
             } else {
                 scanner.next();
             }
-
         }
 
         switch (enteringMethod) {
@@ -29,7 +32,9 @@ public class ImagesManager {
 
             case 1 : image = createRandomImage(); break;
 
-            case 2 : image = usePredefinedImages(); break;
+            case 2 : image = usePredefinedImages(new Random().nextInt(10)); break;
+
+            case 3 : selfLearn(0,0); return;
 
         }
 
@@ -53,6 +58,7 @@ public class ImagesManager {
                 image[index] = line.charAt(i);
             }
         }
+        selectedImage = 10;
         return image;
     }
 
@@ -65,10 +71,35 @@ public class ImagesManager {
                 image[i] = 'X';
             }
         }
+        selectedImage = 10;
         return image;
     }
 
-    private char[] usePredefinedImages() {
+    private boolean selfLearn(int totalAttempts, int learningCycles) {
+        if (totalAttempts > 10000) {
+            System.out.println("More then 10000 attempts without result :(");
+            return false;
+        }
+
+        for (int i = 0; i < 10; i++) {
+           totalAttempts++;
+           char[] img = usePredefinedImages(i);
+           if(!digitRecognize(convertImage(img))) {
+               learningCycles++;
+               if( selfLearn(totalAttempts,learningCycles)) {
+                   return true;
+               } else {
+                   return false;
+               }
+           }
+        }
+        System.out.println("Learning finished! Total attempts: " + totalAttempts +
+                " Learning cycles: " + learningCycles );
+        return true;
+
+    }
+
+    private char[] usePredefinedImages(int id) {
         char[] i0 =  {
                 'X','X','X',
                 'X','_','X',
@@ -149,7 +180,8 @@ public class ImagesManager {
                 'X','X','X',
         };
 
-        switch (new Random().nextInt(9)) {
+        selectedImage = id;
+        switch (id) {
             case 0 : return i0;
             case 1 : return i1;
             case 2 : return i2;
@@ -185,13 +217,14 @@ public class ImagesManager {
         return inputNeurons;
     }
 
-    private void digitRecognize(int[] inputNeurons) {
+    private boolean digitRecognize(int[] inputNeurons) {
+        int userReaction = -1;
         double result;
         double bestResult = -1000;
-        int recognizedDigit;
+        int recognizedDigit = 0;
 
         for (int i =0; i < 10; i++) {
-            result = learning.getOutNeurons()[i].outputNeuron(inputNeurons);
+            result = neurons.getOutputNeurons()[i].outputNeuron(inputNeurons);
             if (result > bestResult) {
                 bestResult = result;
                 recognizedDigit = i;
@@ -199,23 +232,33 @@ public class ImagesManager {
         }
 
         System.out.println("\nThe digit on picture is " + recognizedDigit);
-    }
 
-
-    private void digitRecognizeWithPreDefinedWights(int[] inputNeurons) {
-        double result;
-        double bestResult = -1000;
-        int recognizedDigit =0;
-        OutputNeuronsCollection outputNeuronsCollection = new OutputNeuronsCollection();
-
-        for (int i =0; i < 10; i++) {
-            result = outputNeuronsCollection.neurons[i].outputNeuron(inputNeurons);
-            if (result > bestResult) {
-                bestResult = result;
-                recognizedDigit = i;
-            }
+        if (selectedImage != recognizedDigit && selectedImage < 10) {
+            System.out.println("Recognized incorrect, going learning!");
+            neurons.learnNeurons();
+            return false;
         }
 
-        System.out.println("\nThe digit on picture is " + recognizedDigit);
+        if (selectedImage == 10) {
+            while (userReaction < 0 || userReaction >1) {
+                System.out.println("Recognition result is correct? Type 1 if ok, or 0 if not");
+                if (scanner.hasNextInt()) {
+                    userReaction = scanner.nextInt();
+                } else {
+                    scanner.next();
+                }
+            }
+
+            if (userReaction == 0) {
+                System.out.println("Recognized incorrect, going learning!");
+                neurons.learnNeurons();
+                return false;
+            } else {
+                System.out.println("Really good!");
+                return true;
+            }
+        }
+        return true;
     }
+
 }

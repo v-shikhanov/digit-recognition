@@ -31,3 +31,4 @@ git.properties
 
 # Dataset files
 *.txt
+neurons\.tmp
