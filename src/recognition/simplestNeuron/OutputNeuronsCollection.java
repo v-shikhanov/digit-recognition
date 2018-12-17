@@ -3,7 +3,7 @@ package recognition.simplestNeuron;
 
 public class OutputNeuronsCollection {
 
-    private final int[][] weight = {
+    private final double[][] weight = {
             {1,1,1, 1,-1,1, 1,-1,1, 1,-1,1, 1,1,1}, //0
             {-1,1,-1, -1,1,-1, -1,1,-1, -1,1,-1, -1,1,-1},//1
             {1,1,1, -1,-1,1, 1,1,1, 1,-1,-1, 1,1,1},//2

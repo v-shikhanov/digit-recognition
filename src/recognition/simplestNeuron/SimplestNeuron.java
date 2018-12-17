@@ -7,16 +7,18 @@ public class SimplestNeuron {
     /**
      * pre defined weight coefficients for simplest neuron
      */
-    private int[] weight;
+    private double[] weight;
     private int bias;
 
-    public SimplestNeuron(int[] weight, int bias) {
+
+    public SimplestNeuron(double[] weight, int bias) {
         this.weight = weight;
         this.bias = bias;
     }
 
-    public SimplestNeuron(int[] weight) {
-        this.weight = weight;
+    public SimplestNeuron() {
+        double[] w = {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0};
+        this.weight = w;
         this.bias = 0;
     }
     /**
@@ -41,11 +43,11 @@ public class SimplestNeuron {
         return outputNeuron;
     }
 
-    public int[] getWeight() {
+    public double[] getWeight() {
         return weight;
     }
 
-    public void setWeight(int[] weight) {
-        this.weight = weight;
+    public void setWeight(int index, double weight) {
+        this.weight[index] = weight;
     }
 }

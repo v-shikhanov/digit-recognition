@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class ImagesManager {
     private Scanner scanner = new Scanner(System.in);
+    public  Learning learning = new Learning();
 
     public void selectEnteringMethod() {
 
@@ -185,6 +186,23 @@ public class ImagesManager {
     }
 
     private void digitRecognize(int[] inputNeurons) {
+        double result;
+        double bestResult = -1000;
+        int recognizedDigit;
+
+        for (int i =0; i < 10; i++) {
+            result = learning.getOutNeurons()[i].outputNeuron(inputNeurons);
+            if (result > bestResult) {
+                bestResult = result;
+                recognizedDigit = i;
+            }
+        }
+
+        System.out.println("\nThe digit on picture is " + recognizedDigit);
+    }
+
+
+    private void digitRecognizeWithPreDefinedWights(int[] inputNeurons) {
         double result;
         double bestResult = -1000;
         int recognizedDigit =0;
