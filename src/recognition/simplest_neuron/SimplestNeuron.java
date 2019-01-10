@@ -1,4 +1,4 @@
-package recognition.simplestNeuron;
+package recognition.simplest_neuron;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -12,8 +12,11 @@ public class SimplestNeuron implements Serializable {
      */
     private double[] weight;
 
-    public SimplestNeuron() {
-        double[] w = new double[15];
+    private int size;
+
+    public SimplestNeuron(int size) {
+        double[] w = new double[size];
+        this.size = size;
         for (int i = 0; i < 15; i++) {
             w[i] = new Random().nextDouble();
         }
@@ -33,7 +36,7 @@ public class SimplestNeuron implements Serializable {
             return -100;
         }
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < size; i++) {
             outputNeuron += inputNeurons[i]*weight[i];
         }
 

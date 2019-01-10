@@ -1,7 +1,7 @@
-package recognition.simplestNeuron;
+package recognition.simplest_neuron;
 
 public class Learning {
-    private double[][] deltaWeights = new double[10][15];
+    private double[][] deltaWeights;
     private final int[][] learningImages = {
             {
                     1,1,1,
@@ -78,6 +78,7 @@ public class Learning {
 
 
     public Learning () {
+        deltaWeights = new double[10][15];
     }
 
     public SimplestNeuron[] correctWeights(SimplestNeuron[] outputNeurons){

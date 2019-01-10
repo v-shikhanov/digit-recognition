@@ -1,11 +1,14 @@
-package recognition.simplestNeuron;
+package recognition;
+
+import recognition.neural_network.NeuralNetwork;
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class ImagesManager {
     private Scanner scanner = new Scanner(System.in);
-    private OutputNeuronsCollection neurons = new OutputNeuronsCollection();
+    private int[] networkSizes = {15,10};
+    private NeuralNetwork neuralNetwork = new NeuralNetwork(networkSizes);
 
     private int selectedImage;
 
@@ -223,19 +226,13 @@ public class ImagesManager {
         double bestResult = -1000;
         int recognizedDigit = 0;
 
-        for (int i =0; i < 10; i++) {
-            result = neurons.getOutputNeurons()[i].outputNeuron(inputNeurons);
-            if (result > bestResult) {
-                bestResult = result;
-                recognizedDigit = i;
-            }
-        }
+        recognizedDigit = neuralNetwork.recognizeDigit(inputNeurons);
 
         System.out.println("\nThe digit on picture is " + recognizedDigit);
 
         if (selectedImage != recognizedDigit && selectedImage < 10) {
             System.out.println("Recognized incorrect, going learning!");
-            neurons.learnNeurons();
+            neuralNetwork.learn();
             return false;
         }
 
@@ -251,7 +248,7 @@ public class ImagesManager {
 
             if (userReaction == 0) {
                 System.out.println("Recognized incorrect, going learning!");
-                neurons.learnNeurons();
+                neuralNetwork.learn();
                 return false;
             } else {
                 System.out.println("Really good!");

@@ -1,17 +1,20 @@
-package recognition.simplestNeuron;
+package recognition.simplest_neuron;
 
 
 import java.io.*;
 
 public class OutputNeuronsCollection implements Serializable {
     private static final long serialVersionUID = 123L;
+    /**
+     * @Serial
+     */
     private SimplestNeuron[] outputNeurons = new SimplestNeuron[10];
 
     public OutputNeuronsCollection() {
         File savedNeurons = new File("neurons.tmp");
         if (!savedNeurons.isFile()) {
             for (int i =0; i < 10; i++) {
-                outputNeurons[i] = new SimplestNeuron();
+                outputNeurons[i] = new SimplestNeuron(15);
             }
             return;
         }
