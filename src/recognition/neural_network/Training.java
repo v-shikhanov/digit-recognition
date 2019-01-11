@@ -1,7 +1,8 @@
 package recognition.neural_network;
 
 public class Training {
-    private double[][] deltaWeights;
+
+    private Layer[] layers;
     private final int[][] learningImages = {
             {
                     1,1,1,
@@ -77,48 +78,83 @@ public class Training {
 
 
 
-    public Training () {
-        deltaWeights = new double[10][15];
+    public Training (Layer[] layers) {
+        this.layers = layers;
     }
 
-    public Layer correctWeights(Layer outputNeurons){
-        for (int outNeuronIndex = 0; outNeuronIndex < 10; outNeuronIndex++) {
-            for (int imageNumber = 0; imageNumber < 10; imageNumber++) {
-                double sigma = countSigmoidFunction(outputNeurons.getNeurons()[outNeuronIndex], learningImages[imageNumber]);
-                int idealNumber;
+    public Layer[] train() {
+        for (int i = 0; i < learningImages.length; i++) {
+            /*
+                in future drawn digit and index in collection of training images could be a different numbers
+             */
+            trainWithImage(i,learningImages[i]);
+        }
+        return layers;
+    }
 
-                if (imageNumber == outNeuronIndex) {
-                    idealNumber = 1;
-                } else {
-                    idealNumber = 0;
+    private void trainWithImage(int digit, int[] img) {
+        layers[0].mountImageToLayer(img);
+        findIdealOutputs(digit);
+
+        /*
+         * Weights correction layer by layer
+         */
+        for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
+            int prevLayerLength = layers[layerIndex-1].getNeurons().length;
+            int currentLayerLength = layers[layerIndex].getNeurons().length;
+
+            for (int neuronIndex = 0; neuronIndex < currentLayerLength; neuronIndex++) {
+                Neuron neuron = layers[layerIndex].getNeurons()[neuronIndex];
+                neuron.countOutput(layers[layerIndex-1].getNeurons());
+                double sigma = countSigmoidFunction(neuron);
+                layers[layerIndex].setNeuron(neuronIndex,neuron);
+                /*
+                    update weight for given input neuron to delta value
+                 */
+                for (int inNeuronIndex = 0; inNeuronIndex < prevLayerLength; inNeuronIndex++) {
+                    Neuron inputNeuron = layers[layerIndex-1].getNeurons()[inNeuronIndex];
+                    double weight = layers[layerIndex].getNeurons()[neuronIndex].getWeights()[inNeuronIndex];
+                    weight += foundDeltaWight(inputNeuron, neuron, sigma);
+                    layers[layerIndex].getNeurons()[neuronIndex].setWeight(inNeuronIndex, weight);
                 }
-
-                for (int pixelNumber = 0; pixelNumber < 15; pixelNumber++) {
-                    deltaWeights[imageNumber][pixelNumber] = foundDeltaWight(imageNumber, pixelNumber, idealNumber, sigma);
-                }
-            }
-            for (int pixelNumber = 0; pixelNumber < 15; pixelNumber++) {
-                double meanDeltaWeight = 0;
-                double newWeight;
-
-                for (int imageNumber = 0; imageNumber < 10; imageNumber++) {
-                    meanDeltaWeight += deltaWeights[imageNumber][pixelNumber];
-                }
-
-                newWeight = outputNeurons.getNeurons()[outNeuronIndex].getWeights()[pixelNumber] + meanDeltaWeight / 10;
-                outputNeurons.getNeurons()[outNeuronIndex].setWeight(pixelNumber, newWeight);
             }
         }
-        return outputNeurons;
     }
 
-    private double countSigmoidFunction(Neuron n, int[] inputNeurons){
-        n.countOutput(inputNeurons);
+    private void findIdealOutputs(int digit) {
+        /*
+           set ideal outputs to output layer
+         */
+        for (int i = 0; i < layers[layers.length-1].getNeurons().length; i++) {
+            int idealOutput = 0;
+            if (i == digit) {
+                idealOutput = 1;
+            }
+            layers[layers.length-1].getNeurons()[i].setIdealOutput(idealOutput);
+        }
+
+        /*
+          count ideal outputs to intermediate layers in backward order
+         */
+        for (int layerIndex = layers.length -2; layerIndex > 0; layerIndex--) {
+            for (int neuronIndex = 0; neuronIndex < layers[layerIndex].getNeurons().length; neuronIndex++) {
+                layers[layerIndex].getNeurons()[neuronIndex].countIdealOutput(layers[layerIndex+1].getNeurons(), neuronIndex);
+            }
+        }
+    }
+
+
+
+    private double countSigmoidFunction(Neuron n){
         return  1 / (1 + Math.exp(-n.getValue()));
     }
 
-    private double foundDeltaWight(int imageNumber, int pixelNumber, int idealValue, double sigma) {
+    private double foundDeltaWight(Neuron inputNeuron, Neuron neuron, double sigma) {
         double educationSpeed = 0.5;
-        return educationSpeed * learningImages[imageNumber][pixelNumber]*(idealValue - sigma);
+        /*
+        Maybe need a sigma for intermediate layers val and ideal values. Check this!!!!
+         */
+        return educationSpeed * inputNeuron.getValue() * (neuron.getIdealOutput() - sigma);
     }
 }
+

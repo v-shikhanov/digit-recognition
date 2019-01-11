@@ -6,6 +6,7 @@ import java.util.Random;
 public class Neuron implements Serializable {
 
     private double value;
+    private double idealOutput;
 
     private double[] weights;
     private double bias;
@@ -52,23 +53,24 @@ public class Neuron implements Serializable {
     }
 
     /**
-     * This method used only for case with two layers in network
-     * Method count neuron value depending of prev layer state and weights
-     * @param prevLayer previous layer
+     * Method counts ideal output for neurons in intermediate layers
+     * @param nextLayer next layer with ideal outputs
+     * @param thisNeuronPosition number of neuron in this layer
      */
-    public void countOutput(int[] prevLayer) {
-        double output = 0;
+    public void countIdealOutput(Neuron[] nextLayer, int thisNeuronPosition) {
+        double idealOutput = 0;
 
-        if (prevLayer.length != weights.length) {
-            System.out.println("Incorrect input neurons matrix size");
+        for (int i = 0; i < nextLayer.length; i++) {
+            double weight = nextLayer[i].getWeights()[thisNeuronPosition];
+            if (weight != 0) {
+                idealOutput += nextLayer[i].getIdealOutput()/weight;
+            } else {
+                idealOutput = Double.MAX_VALUE;
+                break;
+            }
         }
 
-        for (int i = 0; i < weights.length; i++) {
-            output += prevLayer[i]*weights[i];
-        }
-
-        output += bias;
-        this.value = output;
+        this.idealOutput = idealOutput;
     }
 
     /**
@@ -91,4 +93,11 @@ public class Neuron implements Serializable {
     }
 
 
+    public double getIdealOutput() {
+        return idealOutput;
+    }
+
+    public void setIdealOutput(double idealOutput) {
+        this.idealOutput = idealOutput;
+    }
 }

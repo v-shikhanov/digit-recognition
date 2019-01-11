@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class ImagesManager {
     private Scanner scanner = new Scanner(System.in);
-    private int[] networkSizes = {15,10};
+    private int[] networkSizes = {15, 10, 10};
     private NeuralNetwork neuralNetwork = new NeuralNetwork(networkSizes);
 
     private int selectedImage;
@@ -105,81 +105,81 @@ public class ImagesManager {
     private char[] usePredefinedImages(int id) {
         char[] i0 =  {
                 'X','X','X',
-                'X','_','X',
-                'X','_','X',
-                'X','_','X',
+                'X',' ','X',
+                'X',' ','X',
+                'X',' ','X',
                 'X','X','X',
         };
 
         char[] i1=  {
-                '_','X','_',
-                '_','X','_',
-                '_','X','_',
-                '_','X','_',
-                '_','X','_',
+                ' ','X',' ',
+                ' ','X',' ',
+                ' ','X',' ',
+                ' ','X',' ',
+                ' ','X',' ',
         };
 
         char[] i2 =  {
                 'X','X','X',
-                '_','_','X',
+                ' ',' ','X',
                 'X','X','X',
-                'X','_','_',
+                'X',' ',' ',
                 'X','X','X',
         };
 
         char[] i3 =  {
                 'X','X','X',
-                '_','_','X',
+                ' ',' ','X',
                 'X','X','X',
-                '_','_','X',
+                ' ',' ','X',
                 'X','X','X',
         };
 
         char[] i4 =  {
-                'X','_','X',
-                'X','_','X',
+                'X',' ','X',
+                'X',' ','X',
                 'X','X','X',
-                '_','_','X',
-                '_','_','X',
+                ' ',' ','X',
+                ' ',' ','X',
         };
 
         char[] i5 =  {
                 'X','X','X',
-                'X','_','_',
+                'X',' ',' ',
                 'X','X','X',
-                '_','_','X',
+                ' ',' ','X',
                 'X','X','X',
         };
 
         char[] i6 =  {
                 'X','X','X',
-                'X','_','_',
+                'X',' ',' ',
                 'X','X','X',
-                'X','_','X',
+                'X',' ','X',
                 'X','X','X',
         };
 
         char[] i7 =  {
                 'X','X','X',
-                '_','_','X',
-                '_','_','X',
-                '_','_','X',
-                '_','_','X',
+                ' ',' ','X',
+                ' ',' ','X',
+                ' ',' ','X',
+                ' ',' ','X',
         };
 
         char[] i8 =  {
                 'X','X','X',
-                'X','_','X',
+                'X',' ','X',
                 'X','X','X',
-                'X','_','X',
+                'X',' ','X',
                 'X','X','X',
         };
 
         char[] i9 =  {
                 'X','X','X',
-                'X','_','X',
+                'X',' ','X',
                 'X','X','X',
-                '_','_','X',
+                ' ',' ','X',
                 'X','X','X',
         };
 
@@ -210,10 +210,10 @@ public class ImagesManager {
             for (int i = string*3; i < string*3 + 3; i++) {
                 cell = img[i];
                 System.out.print(cell);
-                if (cell == '_') {
-                    inputNeurons[i] = 0;
-                } else {
+                if (cell == 'X') {
                     inputNeurons[i] = 1;
+                } else {
+                    inputNeurons[i] = 0;
                 }
             }
         }
@@ -222,9 +222,7 @@ public class ImagesManager {
 
     private boolean digitRecognize(int[] inputNeurons) {
         int userReaction = -1;
-        double result;
-        double bestResult = -1000;
-        int recognizedDigit = 0;
+        int recognizedDigit;
 
         recognizedDigit = neuralNetwork.recognizeDigit(inputNeurons);
 

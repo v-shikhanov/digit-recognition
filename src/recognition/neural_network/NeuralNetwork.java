@@ -6,7 +6,6 @@ public class NeuralNetwork implements Serializable {
 
     private Layer[] layers;
     private int[] layersSizes;
-    private Training training;
 
 
     /**
@@ -24,8 +23,6 @@ public class NeuralNetwork implements Serializable {
         this.layersSizes = layersSizes;
 
         this.layers[0] = new Layer(0, layersSizes[0]);
-
-        training = new Training();
 
         File savedNeurons = new File("neurons.tmp");
         if (!savedNeurons.isFile()) {
@@ -49,7 +46,7 @@ public class NeuralNetwork implements Serializable {
      *  Method calling correct weights method of training class.
      */
     public void learn() {
-        layers[1] = training.correctWeights(layers[1]);
+        layers = new Training(layers).train();
         saveResults();
     }
 
@@ -125,6 +122,4 @@ public class NeuralNetwork implements Serializable {
             e.printStackTrace();
         }
     }
-
-
 }
