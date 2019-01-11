@@ -1,6 +1,8 @@
 package recognition.neural_network;
 
-public class NeuralNetwork {
+import java.io.*;
+
+public class NeuralNetwork implements Serializable {
 
     private Layer[] layers;
     private int[] layersSizes;
@@ -8,10 +10,9 @@ public class NeuralNetwork {
 
 
     /**
-     * Constructor for neural network
+     * Constructor for neural network, load it from file if it exists
      * @param layersSizes array with quantity of neurons in every layer
      *                    for example NeuralNetwork{15,10,10,10});
-     *
      */
     public NeuralNetwork(int[] layersSizes) {
         if (layersSizes.length < 2) {
@@ -24,17 +25,39 @@ public class NeuralNetwork {
 
         this.layers[0] = new Layer(0, layersSizes[0]);
 
-        for (int i = 1; i < layers.length; i++) {
-            this.layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+        training = new Training();
+
+        File savedNeurons = new File("neurons.tmp");
+        if (!savedNeurons.isFile()) {
+            for (int i = 1; i < layers.length; i++) {
+                this.layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+            }
+            return;
         }
 
-        training = new Training();
+        try {
+            FileInputStream fileInputStream = new FileInputStream(savedNeurons);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            layers = (Layer[])objectInputStream.readObject();
+            System.out.println("\nNeurons are load from file");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     *  Method calling correct weights method of training class.
+     */
     public void learn() {
         layers[1] = training.correctWeights(layers[1]);
+        saveResults();
     }
 
+    /**
+     * Method recognize what digit is written on given image
+     * @param img array with all pixels in image
+     * @return digit which was written on image
+     */
     public int recognizeDigit(int[] img) {
         double result;
         double bestResult = -1000;
@@ -58,6 +81,10 @@ public class NeuralNetwork {
         return recognizedDigit;
     }
 
+    /**
+     * Method updates neurons values in network (recalculate all network)
+     * @param img input image for first layer of network
+     */
     private void updateNeurons(int[] img) {
         for (int i = 0; i < img.length; i++) {
             this.layers[0].getNeurons()[i].setValue(img[i]);
@@ -68,6 +95,34 @@ public class NeuralNetwork {
             for (int neuronNumber = 0; neuronNumber < neuronsQt; neuronNumber++) {
                 layers[layerNumber].getNeurons()[neuronNumber].countOutput(layers[layerNumber-1].getNeurons());
             }
+        }
+    }
+
+    /**
+     * method saves neural network to file
+     */
+    public void saveResults() {
+        File savedNeurons = new File("neurons.tmp");
+        if (!savedNeurons.isFile()) {
+            try {
+                savedNeurons.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("\nFile creation is impossible!");
+                return;
+            }
+        }
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(savedNeurons);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+            objectOutputStream.writeObject(layers);
+            objectOutputStream.close();
+            System.out.println("Neurons saved to file");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

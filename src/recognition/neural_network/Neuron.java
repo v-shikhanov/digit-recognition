@@ -1,21 +1,14 @@
 package recognition.neural_network;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Neuron {
+public class Neuron implements Serializable {
 
     private double value;
 
     private double[] weights;
     private double bias;
-
-//    /**
-//     * Constructor for case when neuron is part input layer
-//     * @param value input neuron value
-//     */
-//    public Neuron(double value) {
-//        this.value = value;
-//    }
 
     /**
      * Constructor for case when neuron is part non-input layer
@@ -26,8 +19,10 @@ public class Neuron {
         this.value = 0;
     }
 
-
-
+    /**
+     * Method initialise weights with random numbers
+     * @param inputSize is a quantity of neurons in previous layer
+     */
     private void initWeights(int inputSize) {
         if (inputSize > 0) {
             this.weights = new double[inputSize];
@@ -37,6 +32,10 @@ public class Neuron {
         }
     }
 
+    /**
+     * Method count neuron value depending of prev layer state and weights
+     * @param prevLayer previous layer
+     */
     public void countOutput(Neuron[] prevLayer) {
         double output = 0;
 
@@ -52,6 +51,11 @@ public class Neuron {
         this.value = output;
     }
 
+    /**
+     * This method used only for case with two layers in network
+     * Method count neuron value depending of prev layer state and weights
+     * @param prevLayer previous layer
+     */
     public void countOutput(int[] prevLayer) {
         double output = 0;
 
@@ -67,12 +71,15 @@ public class Neuron {
         this.value = output;
     }
 
-    public void setValue(double value) {
-        this.value = value;
-    }
-
+    /**
+     * Getters and setters
+     */
     public double getValue() {
         return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public double[] getWeights() {
