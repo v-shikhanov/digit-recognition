@@ -9,6 +9,7 @@ public class Neuron implements Serializable {
     private double idealOutput;
 
     private double[] weights;
+    private double[] deltaWeights;
     private double bias;
 
     /**
@@ -17,6 +18,8 @@ public class Neuron implements Serializable {
      */
     public Neuron(int inputSize) {
         initWeights(inputSize);
+        this.deltaWeights = new double[inputSize];
+        resetDeltaWeights();
         this.value = 0;
     }
 
@@ -69,8 +72,13 @@ public class Neuron implements Serializable {
                 break;
             }
         }
-
         this.idealOutput = idealOutput;
+    }
+
+    public void resetDeltaWeights() {
+        for (int i = 0; i < deltaWeights.length; i++) {
+            this.deltaWeights[i] = 0;
+        }
     }
 
     /**
@@ -90,6 +98,14 @@ public class Neuron implements Serializable {
 
     public void setWeight(int index, double weight) {
         this.weights[index] = weight;
+    }
+
+    public double[] getDeltaWeights() {
+        return deltaWeights;
+    }
+
+    public void setDeltaWeight(int index, double weight) {
+        this.deltaWeights[index] = weight;
     }
 
 

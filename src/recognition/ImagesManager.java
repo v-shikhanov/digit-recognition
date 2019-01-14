@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class ImagesManager {
     private Scanner scanner = new Scanner(System.in);
-    private int[] networkSizes = {15, 10, 10};
+    private int[] networkSizes = {15,10, 10};
     private NeuralNetwork neuralNetwork = new NeuralNetwork(networkSizes);
 
     private int selectedImage;
@@ -37,7 +37,7 @@ public class ImagesManager {
 
             case 2 : image = usePredefinedImages(new Random().nextInt(10)); break;
 
-            case 3 : selfLearn(0,0); return;
+            case 3 : selfLearn(); return;
 
         }
 
@@ -78,27 +78,27 @@ public class ImagesManager {
         return image;
     }
 
-    private boolean selfLearn(int totalAttempts, int learningCycles) {
-        if (totalAttempts > 10000) {
-            System.out.println("More then 10000 attempts without result :(");
-            return false;
+    private void  selfLearn () {
+        int totalAttempts = 0;
+        int learningCycles = 0;
+
+        boolean learningComplete = false;
+        while (!learningComplete) {
+            learningComplete = true;
+            for (int i = 0; i < 10; i++) {
+                totalAttempts++;
+                char[] img = usePredefinedImages(i);
+
+                if (!digitRecognize(convertImage(img))) {
+                    learningComplete = false;
+                    break;
+                }
+            }
+            learningCycles++;
         }
 
-        for (int i = 0; i < 10; i++) {
-           totalAttempts++;
-           char[] img = usePredefinedImages(i);
-           if(!digitRecognize(convertImage(img))) {
-               learningCycles++;
-               if( selfLearn(totalAttempts,learningCycles)) {
-                   return true;
-               } else {
-                   return false;
-               }
-           }
-        }
         System.out.println("Learning finished! Total attempts: " + totalAttempts +
                 " Learning cycles: " + learningCycles );
-        return true;
 
     }
 

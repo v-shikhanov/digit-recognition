@@ -47,7 +47,7 @@ public class NeuralNetwork implements Serializable {
      */
     public void learn() {
         layers = new Training(layers).train();
-        saveResults();
+      //  saveResults();
     }
 
     /**
