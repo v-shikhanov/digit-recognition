@@ -24,6 +24,10 @@ public class NeuralNetwork implements Serializable {
 
         this.layers[0] = new Layer(0, layersSizes[0]);
 
+        for (int i = 1; i < layers.length; i++) {
+            this.layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+        }
+
         File savedNeurons = new File("neurons.tmp");
         if (!savedNeurons.isFile()) {
             for (int i = 1; i < layers.length; i++) {
@@ -47,7 +51,6 @@ public class NeuralNetwork implements Serializable {
      */
     public void learn() {
         layers = new Training(layers).train();
-      //  saveResults();
     }
 
     /**
@@ -59,6 +62,7 @@ public class NeuralNetwork implements Serializable {
         double result;
         double bestResult = -1000;
         int recognizedDigit = 0;
+        int outputLayerSize = layersSizes[layersSizes.length-1];
 
         if (img.length != layersSizes[0]) {
             System.out.println("Size of image not matched with neural network input size!!!");
@@ -67,11 +71,11 @@ public class NeuralNetwork implements Serializable {
 
         updateNeurons(img);
 
-        for (int i = 0; i < layersSizes[layers.length-1]; i++) {
-            result = layers[layers.length-1].getNeurons()[i].getValue();
+        for (int neuronIndex = 0; neuronIndex < outputLayerSize; neuronIndex++) {
+            result = layers[layers.length-1].getValues()[neuronIndex];
             if (result > bestResult) {
                 bestResult = result;
-                recognizedDigit = i;
+                recognizedDigit = neuronIndex;
             }
         }
 
@@ -83,22 +87,18 @@ public class NeuralNetwork implements Serializable {
      * @param img input image for first layer of network
      */
     private void updateNeurons(int[] img) {
-        for (int i = 0; i < img.length; i++) {
-            this.layers[0].getNeurons()[i].setValue(img[i]);
-        }
+        layers[0].mountImageToLayer(img);
 
-        for (int layerNumber = 1; layerNumber < layers.length; layerNumber++) {
-            int neuronsQt = this.layers[layerNumber].getNeurons().length;
-            for (int neuronNumber = 0; neuronNumber < neuronsQt; neuronNumber++) {
-                layers[layerNumber].getNeurons()[neuronNumber].countOutput(layers[layerNumber-1].getNeurons());
-            }
+        for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
+            double[] prevLayerValues = layers[layerIndex-1].getValues();
+            layers[layerIndex].updateValues(prevLayerValues); //maybe we need sigmoid here!!!!
         }
     }
 
     /**
      * method saves neural network to file
      */
-    public void saveResults() {
+    public void save() {
         File savedNeurons = new File("neurons.tmp");
         if (!savedNeurons.isFile()) {
             try {

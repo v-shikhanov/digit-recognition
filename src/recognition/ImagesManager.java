@@ -7,14 +7,14 @@ import java.util.Scanner;
 
 public class ImagesManager {
     private Scanner scanner = new Scanner(System.in);
-    private int[] networkSizes = {15,10, 10};
+    private int[] networkSizes = {15, 12, 10};
     private NeuralNetwork neuralNetwork = new NeuralNetwork(networkSizes);
 
     private int selectedImage;
 
     public void selectEnteringMethod() {
 
-        char[] image = new char[15];
+        int[] image = new int[15];
         int enteringMethod = -1;
         while (enteringMethod < 0 || enteringMethod > 3) {
             System.out.println("\n\nPlease select operation: " +
@@ -41,11 +41,12 @@ public class ImagesManager {
 
         }
 
-        digitRecognize(convertImage(image));
+        printImage(image);
+        digitRecognize(image);
     }
 
-    private char[] getUserImage() {
-        char[] image = new char[15];
+    private int[] getUserImage() {
+        int[] image = new int[15];
         String line;
         System.out.println("Input 3x5 grid('_' for white, any other for black).Five strings, 3 symbol in one, or one ");
         for (int string = 0; string < 5; string++) {
@@ -65,13 +66,13 @@ public class ImagesManager {
         return image;
     }
 
-    private char[] createRandomImage() {
-        char[] image = new char[15];
+    private int[] createRandomImage() {
+        int[] image = new int[15];
         for (int i = 0; i < 15; i++) {
             if (new Random().nextBoolean()){
-                image[i] = '_';
+                image[i] = 0;
             } else {
-                image[i] = 'X';
+                image[i] = 1;
             }
         }
         selectedImage = 10;
@@ -83,104 +84,109 @@ public class ImagesManager {
         int learningCycles = 0;
 
         boolean learningComplete = false;
+
+        System.out.println("Learning is started, please wait");
         while (!learningComplete) {
             learningComplete = true;
             for (int i = 0; i < 10; i++) {
                 totalAttempts++;
-                char[] img = usePredefinedImages(i);
+                int[] img = usePredefinedImages(i);
 
-                if (!digitRecognize(convertImage(img))) {
+                if ( neuralNetwork.recognizeDigit(img) != i) {
+                    neuralNetwork.learn();
+                    learningCycles++;
                     learningComplete = false;
                     break;
                 }
             }
-            learningCycles++;
+
         }
 
         System.out.println("Learning finished! Total attempts: " + totalAttempts +
                 " Learning cycles: " + learningCycles );
+        neuralNetwork.save();
 
     }
 
-    private char[] usePredefinedImages(int id) {
-        char[] i0 =  {
-                'X','X','X',
-                'X',' ','X',
-                'X',' ','X',
-                'X',' ','X',
-                'X','X','X',
+    private int[] usePredefinedImages(int id) {
+        int[] i0 =  {
+                1,1,1,
+                1,0,1,
+                1,0,1,
+                1,0,1,
+                1,1,1,
         };
 
-        char[] i1=  {
-                ' ','X',' ',
-                ' ','X',' ',
-                ' ','X',' ',
-                ' ','X',' ',
-                ' ','X',' ',
+        int[] i1=  {
+                0,1,0,
+                0,1,0,
+                0,1,0,
+                0,1,0,
+                0,1,0,
         };
 
-        char[] i2 =  {
-                'X','X','X',
-                ' ',' ','X',
-                'X','X','X',
-                'X',' ',' ',
-                'X','X','X',
+        int[] i2 =  {
+                1,1,1,
+                0,0,1,
+                1,1,1,
+                1,0,0,
+                1,1,1,
         };
 
-        char[] i3 =  {
-                'X','X','X',
-                ' ',' ','X',
-                'X','X','X',
-                ' ',' ','X',
-                'X','X','X',
+        int[] i3 =  {
+                1,1,1,
+                0,0,1,
+                1,1,1,
+                0,0,1,
+                1,1,1,
         };
 
-        char[] i4 =  {
-                'X',' ','X',
-                'X',' ','X',
-                'X','X','X',
-                ' ',' ','X',
-                ' ',' ','X',
+        int[] i4 =  {
+                1,0,1,
+                1,0,1,
+                1,1,1,
+                0,0,1,
+                0,0,1,
         };
 
-        char[] i5 =  {
-                'X','X','X',
-                'X',' ',' ',
-                'X','X','X',
-                ' ',' ','X',
-                'X','X','X',
+        int[] i5 =  {
+                1,1,1,
+                1,0,0,
+                1,1,1,
+                0,0,1,
+                1,1,1,
         };
 
-        char[] i6 =  {
-                'X','X','X',
-                'X',' ',' ',
-                'X','X','X',
-                'X',' ','X',
-                'X','X','X',
+        int[] i6 =  {
+                1,1,1,
+                1,0,0,
+                1,1,1,
+                1,0,1,
+                1,1,1,
         };
 
-        char[] i7 =  {
-                'X','X','X',
-                ' ',' ','X',
-                ' ',' ','X',
-                ' ',' ','X',
-                ' ',' ','X',
+        int[] i7 =  {
+                1,1,1,
+                0,0,1,
+                0,0,1,
+                0,0,1,
+                0,0,1,
         };
 
-        char[] i8 =  {
-                'X','X','X',
-                'X',' ','X',
-                'X','X','X',
-                'X',' ','X',
-                'X','X','X',
+        int[] i8 =  {
+                1,1,1,
+                1,0,1,
+                1,1,1,
+                1,0,1,
+                1,1,1,
         };
 
-        char[] i9 =  {
-                'X','X','X',
-                'X',' ','X',
-                'X','X','X',
-                ' ',' ','X',
-                'X','X','X',
+        int[] i9 =  {
+                1,1,1,
+                1,0,1,
+                1,1,1,
+                0,0,1,
+                1,1,1,
         };
 
         selectedImage = id;
@@ -199,28 +205,23 @@ public class ImagesManager {
         return i9;
     }
 
+    private void printImage (int[] img) {
+        System.out.printf("\n");
+        for(int i =1; i <= img.length; i++) {
+            if (img[i-1] == 0) {
+                System.out.print("  ");
+            } else {
+                System.out.print("* ");
+            }
 
-
-    private int[] convertImage(char[] img) {
-        int[] inputNeurons = new int[15];
-        char cell;
-
-        for (int string = 0; string < 5; string++) {
-            System.out.print("\n");
-            for (int i = string*3; i < string*3 + 3; i++) {
-                cell = img[i];
-                System.out.print(cell);
-                if (cell == 'X') {
-                    inputNeurons[i] = 1;
-                } else {
-                    inputNeurons[i] = 0;
-                }
+            if (i%3 == 0) {
+                System.out.print("\n");
             }
         }
-        return inputNeurons;
     }
 
-    private boolean digitRecognize(int[] inputNeurons) {
+
+    private void digitRecognize(int[] inputNeurons) {
         int userReaction = -1;
         int recognizedDigit;
 
@@ -231,7 +232,7 @@ public class ImagesManager {
         if (selectedImage != recognizedDigit && selectedImage < 10) {
             System.out.println("Recognized incorrect, going learning!");
             neuralNetwork.learn();
-            return false;
+            return;
         }
 
         if (selectedImage == 10) {
@@ -247,13 +248,10 @@ public class ImagesManager {
             if (userReaction == 0) {
                 System.out.println("Recognized incorrect, going learning!");
                 neuralNetwork.learn();
-                return false;
             } else {
                 System.out.println("Really good!");
-                return true;
             }
         }
-        return true;
     }
 
 }
