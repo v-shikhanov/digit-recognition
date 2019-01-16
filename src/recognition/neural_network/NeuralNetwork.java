@@ -4,6 +4,8 @@ import java.io.*;
 
 public class NeuralNetwork implements Serializable {
 
+
+
     private Layer[] layers;
     private int[] layersSizes;
 
@@ -46,12 +48,6 @@ public class NeuralNetwork implements Serializable {
         }
     }
 
-    /**
-     *  Method calling correct weights method of training class.
-     */
-    public void learn() {
-        layers = new Training(layers).train();
-    }
 
     /**
      * Method recognize what digit is written on given image
@@ -122,4 +118,13 @@ public class NeuralNetwork implements Serializable {
             e.printStackTrace();
         }
     }
+
+    public Layer[] getLayers() {
+        return layers;
+    }
+
+    public void setLayers(Layer[] layers) {
+        this.layers = layers;
+    }
+
 }
