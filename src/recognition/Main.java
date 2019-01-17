@@ -2,12 +2,12 @@ package recognition;
 
 public class Main {
 
-    static ImagesManager imagesManager = new ImagesManager();
+    static ImagesRecognition imagesRecognition = new ImagesRecognition();
 
     public static void main(String[] args) {
 
         while (true) {
-            imagesManager.selectEnteringMethod();
+            imagesRecognition.selectEnteringMethod();
         }
     }
 }

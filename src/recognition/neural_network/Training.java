@@ -1,3 +1,10 @@
+/**
+ * @brief This is class for neurl network training
+ *
+ *
+ * @authors Vladislav Shikhanov
+ *****************************************************************************/
+
 package recognition.neural_network;
 
 import recognition.ImageIDX;
@@ -12,50 +19,63 @@ public class Training {
     private ArrayList<ImageIDX> trainingCol;
 
 
+    /**
+     * Class constructor
+     */
     public Training () {
-
-
         trainingCol = new ArrayList<>();
         File trainingImages = new File("train-images.idx3-ubyte");
         File trainingLabels = new File("train-labels.idx1-ubyte");
 
-        trainingCol = new ReadIDX().updateCollection(trainingLabels,trainingImages,trainingCol);
-
+        trainingCol = new ReadIDX().updateCollection(trainingLabels,trainingImages);
     }
 
-    public Layer[] train(Layer[] layers) {
+    /**
+     * Method that trains given layers with images from training collection and returns updated layers
+     * @param layers - all layers of neural network
+     * @param educationSpeed - speed education coefficient. is coefficient to control how strongly could weights deviate
+     *                      from current values should be bigger for higher learning speed and less for higher accuracy
+     *                      of weights correction
+     * @return updated layers
+     */
+    public Layer[] train(Layer[] layers, double educationSpeed) {
         this.layers = layers;
-        System.out.println("Please wait,learning was started..");
         for (int i = 0; i < trainingCol.size(); i++) {
-            /*
-                in future drawn digit and index in collection of training images could be a different numbers
-             */
             ImageIDX img = trainingCol.get(i);
-            updateDeltaWeights(img.getLabel(),img.getPixels());
+            updateDeltaWeights(img.getLabel(), img.getPixels(), educationSpeed);
         }
         correctWeights(trainingCol.size());
-        System.out.println("Learning finished, completed for " + trainingCol.size() + " images.");
         return this.layers;
     }
 
-    private void updateDeltaWeights(int digit, int[] img) {
+    /**
+     * Method that updates delta weights(used in learning process) final delta value is sum of delta weights for every
+     * image divided to quantity of images used in one learning cycle
+     * @param digit digit that draw on image
+     * @param img image
+     * @param educationSpeed speed education coefficient. is coefficient to control how strongly could weights deviate
+     *                       from current values should be bigger for higher learning speed and less for higher accuracy
+     *                       of weights correction
+     */
+    private void updateDeltaWeights(int digit, int[] img, double educationSpeed) {
         layers[0].mountImageToLayer(img);
 
         findIdealOutputs(digit);
 
-        /*
-         * Weights correction layer by layer
-         */
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
             double[] prevLayerValues = layers[layerIndex-1].getValues();
             layers[layerIndex].updateValues(prevLayerValues);
             layers[layerIndex].castValuesWithSigmoid();
-            layers[layerIndex].updateDeltaWights(0.5,prevLayerValues);
+            layers[layerIndex].updateDeltaWights(educationSpeed,prevLayerValues);
         }
     }
 
 
-
+    /**
+     * Method that updates weights to final delta value that is a sum of delta weights for every image divided to
+     * quantity of images used in one learning cycle
+     * @param divider quantity of images used for learning
+     */
     private void correctWeights(int divider) {
 
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
@@ -63,14 +83,15 @@ public class Training {
         }
     }
 
-
+    /**
+     * Method that finds and updates ideal outputs for all layers depending on input image
+     * @param digit digit that is draw on image
+     */
     private void findIdealOutputs(int digit) {
         /*
            set ideal outputs to output layer
          */
         layers[layers.length-1].setIdealValues(digit);
-
-
         /*
           count ideal outputs to intermediate layers in backward order
          */

@@ -1,3 +1,10 @@
+/**
+ * @brief This is class that contains layer of neural network
+ *
+ *
+ * @authors Vladislav Shikhanov
+ *****************************************************************************/
+
 package recognition.neural_network;
 
 

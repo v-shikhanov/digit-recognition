@@ -1,3 +1,10 @@
+/**
+ * @brief This is class that contains neural network
+ *
+ *
+ * @authors Vladislav Shikhanov
+ *****************************************************************************/
+
 package recognition.neural_network;
 
 import java.io.*;
@@ -8,7 +15,6 @@ public class NeuralNetwork implements Serializable {
 
     private Layer[] layers;
     private int[] layersSizes;
-
 
     /**
      * Constructor for neural network, load it from file if it exists
@@ -87,7 +93,7 @@ public class NeuralNetwork implements Serializable {
 
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
             double[] prevLayerValues = layers[layerIndex-1].getValues();
-            layers[layerIndex].updateValues(prevLayerValues); //maybe we need sigmoid here!!!!
+            layers[layerIndex].updateValues(prevLayerValues);
         }
     }
 
@@ -112,13 +118,15 @@ public class NeuralNetwork implements Serializable {
 
             objectOutputStream.writeObject(layers);
             objectOutputStream.close();
-            System.out.println("Neurons saved to file");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /*
+        Getters and setters
+     */
     public Layer[] getLayers() {
         return layers;
     }

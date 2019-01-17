@@ -1,13 +1,7 @@
 /**
- *
- * @file
- * @brief Here is wrapper class (reader) for IDX files which contains
- * images with numbers examples.
- *
+ * @brief Here is wrapper class (reader) for IDX files.
  *
  * @authors Vladislav Shikhanov
- *
- *		  http://move-llc.ru
  *****************************************************************************/
 
 package recognition;
@@ -19,8 +13,7 @@ public class ReadIDX {
 
 
 
-    /********************************************************************************
-     *
+    /**
      * updateCollection Method updates collection with read images
      *
      * It use two files - one with labels to images (1- for image with draw of one)
@@ -31,12 +24,11 @@ public class ReadIDX {
      *
      * @param labels - file with labels to numbers
      * @param images - file with pixels description
-     * @param col - Collection that should be updated
      *
-     * @return boolean result of update. True if OK.
-     *******************************************************************************/
-    public ArrayList<ImageIDX> updateCollection(File labels, File images, ArrayList<ImageIDX> col) {
-
+     * @return collection of images
+     **/
+    public ArrayList<ImageIDX> updateCollection(File labels, File images) {
+        ArrayList<ImageIDX> col = new ArrayList<>();
         byte[] labelsData = new byte[0];
         byte[] imagesData = new byte[0];
         int labelsIndex = 8;

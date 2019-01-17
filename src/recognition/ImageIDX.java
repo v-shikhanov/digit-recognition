@@ -1,38 +1,28 @@
+/**
+ * @brief This is class contains image and it's real value
+ *
+ *
+ * @authors Vladislav Shikhanov
+ *****************************************************************************/
+
 package recognition;
 
 public class ImageIDX {
-    private double rate;
     private int label;
     private int[] pixels = new int[784];
 
+    /**
+     * class constructor
+     * @param label- digit that draw on picture
+     */
     ImageIDX (int label){
         this.label = label;
     }
 
-    public double getRate() {
-        return rate;
-    }
 
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
-
-    public int getLabel() {
-        return label;
-    }
-
-    public void setLabel(int label) {
-        this.label = label;
-    }
-
-    public int[] getPixels() {
-        return pixels;
-    }
-
-    public void setPixels(int[] pixels) {
-        this.pixels = pixels;
-    }
-
+    /**
+     *  Method prints image to console
+     */
     public void printImage(){
         System.out.print("\n");
         System.out.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
@@ -48,5 +38,16 @@ public class ImageIDX {
                 System.out.print("\n");
             }
         }
+    }
+
+    /*
+        Getters and Setters
+    */
+    public int getLabel() {
+        return label;
+    }
+
+    public int[] getPixels() {
+        return pixels;
     }
 }
