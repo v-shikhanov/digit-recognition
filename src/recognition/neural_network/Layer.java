@@ -1,18 +1,12 @@
 /**
  * @brief This is class that contains layer of neural network
- *
- *
  * @authors Vladislav Shikhanov
- *****************************************************************************/
-
+ **/
 package recognition.neural_network;
-
-
 import java.io.Serializable;
 import java.util.Random;
 
 public class Layer implements Serializable {
-
     /**
      * here stored values of neurons
      * which are set from outside for input layer and count for other
@@ -48,11 +42,11 @@ public class Layer implements Serializable {
      * @param layerSize quantity of neurons in this layer
      */
     public Layer(int prevLayerSize, int layerSize) {
-        this.values = new double[layerSize];
-        this.castedValues = new double[layerSize];
-        this.idealValues = new double[layerSize];
-        this.weights = new double[layerSize][prevLayerSize]; //neuron number and it's connection to prev layer
-        this.deltaWeights = new double[layerSize][prevLayerSize];
+        values = new double[layerSize];
+        castedValues = new double[layerSize];
+        idealValues = new double[layerSize];
+        weights = new double[layerSize][prevLayerSize]; //neuron number and it's connection to prev layer
+        deltaWeights = new double[layerSize][prevLayerSize];
 
         initWeights(prevLayerSize, layerSize);
     }
@@ -73,7 +67,7 @@ public class Layer implements Serializable {
 
     /**
      * This method counts values of neurons depending on input weights and layer
-     * @param inputLayer values of input layer
+     * @param inputLayer values of neurons in input layer
      */
     public void updateValues(double[] inputLayer) {
         if (inputLayer.length != weights[1].length) {
@@ -89,7 +83,7 @@ public class Layer implements Serializable {
     }
 
     /**
-     * Method casts neurons values to 1
+     * Method casts neurons values to 1 vai sigmoid function
      */
     public void castValuesWithSigmoid() {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
@@ -164,6 +158,7 @@ public class Layer implements Serializable {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
             double idealOutput = 0;
             int nextLayerSize = nextLayer.getIdealOutputsLength();
+
             for (int position = 0; position < nextLayer.getIdealOutputsLength(); position++) {
                 idealOutput += nextLayer.getIdealOutput(position) / nextLayer.getWeight(position, neuronIndex);
             }
@@ -189,5 +184,4 @@ public class Layer implements Serializable {
     public double[] getValues() {
         return values;
     }
-
 }

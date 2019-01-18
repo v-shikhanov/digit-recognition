@@ -1,23 +1,16 @@
 /**
  * @brief This is class for neurl network training
- *
- *
  * @authors Vladislav Shikhanov
- *****************************************************************************/
-
+ **/
 package recognition.neural_network;
-
 import recognition.ImageIDX;
 import recognition.ReadIDX;
-
 import java.io.File;
 import java.util.ArrayList;
 
 public class Training {
-
     private Layer[] layers;
     private ArrayList<ImageIDX> trainingCol;
-
 
     /**
      * Class constructor
@@ -26,7 +19,6 @@ public class Training {
         trainingCol = new ArrayList<>();
         File trainingImages = new File("train-images.idx3-ubyte");
         File trainingLabels = new File("train-labels.idx1-ubyte");
-
         trainingCol = new ReadIDX().updateCollection(trainingLabels,trainingImages);
     }
 
@@ -59,7 +51,6 @@ public class Training {
      */
     private void updateDeltaWeights(int digit, int[] img, double educationSpeed) {
         layers[0].mountImageToLayer(img);
-
         findIdealOutputs(digit);
 
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
@@ -70,14 +61,12 @@ public class Training {
         }
     }
 
-
     /**
-     * Method that updates weights to final delta value that is a sum of delta weights for every image divided to
+     * Method updates weights to final delta value that is a sum of delta weights for every image divided to
      * quantity of images used in one learning cycle
      * @param divider quantity of images used for learning
      */
     private void correctWeights(int divider) {
-
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
             layers[layerIndex].correctWights(divider);
         }
@@ -88,13 +77,8 @@ public class Training {
      * @param digit digit that is draw on image
      */
     private void findIdealOutputs(int digit) {
-        /*
-           set ideal outputs to output layer
-         */
         layers[layers.length-1].setIdealValues(digit);
-        /*
-          count ideal outputs to intermediate layers in backward order
-         */
+
         for (int layerIndex = layers.length -2; layerIndex > 0; layerIndex--) {
             layers[layerIndex].setIdealOutputs(layers[layerIndex+1]);
         }

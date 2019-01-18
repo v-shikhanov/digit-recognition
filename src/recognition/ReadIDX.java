@@ -1,18 +1,12 @@
 /**
  * @brief Here is wrapper class (reader) for IDX files.
- *
  * @authors Vladislav Shikhanov
- *****************************************************************************/
-
+ **/
 package recognition;
-
 import java.io.*;
 import java.util.ArrayList;
 
 public class ReadIDX {
-
-
-
     /**
      * updateCollection Method updates collection with read images
      *
@@ -33,46 +27,38 @@ public class ReadIDX {
         byte[] imagesData = new byte[0];
         int labelsIndex = 8;
         int imagesIndex = 16;
-
         int labelsLength;
         int imagesLength;
 
-
-        try ( FileInputStream stream = new FileInputStream(labels) ) {
+        try (FileInputStream stream = new FileInputStream(labels)) {
             labelsData = stream.readAllBytes();
 
         } catch (IOException exc) {
             System.out.println("\nProblem with file reading");
         }
 
-        try ( FileInputStream stream = new FileInputStream(images) ) {
+        try (FileInputStream stream = new FileInputStream(images)) {
             imagesData = stream.readAllBytes();
 
         } catch (IOException exc) {
             System.out.println("\nProblem with file reading");
         }
 
-
         labelsLength = convertBytesToInt(labelsData[4], labelsData[5], labelsData[6], labelsData[7]);
         imagesLength = convertBytesToInt(imagesData[4], imagesData[5], imagesData[6], imagesData[7]);
 
-        /*
-        Checking that labels and images files are equal and correct
-        */
         if ((labelsLength != imagesLength) || (labelsData[3] != 1) || (imagesData[3] != 3) ||
                 (labelsLength + labelsIndex != labelsData.length)
                 || (imagesLength*784 + imagesIndex != imagesData.length)){
-
             System.out.println("Collection update failed");
-            return null;
+            return col;
         }
 
-        for( int i = 0; i < labelsLength; i++){
-
+        for (int i = 0; i < labelsLength; i++){
             ImageIDX img = new ImageIDX( Byte.toUnsignedInt(labelsData[labelsIndex]));
             labelsIndex++;
 
-            for ( int index = 0; index < 784; index++){
+            for (int index = 0; index < 784; index++){
                     img.getPixels()[index] = Byte.toUnsignedInt(imagesData[imagesIndex]);
                     imagesIndex++;
             }
@@ -81,22 +67,16 @@ public class ReadIDX {
         return col;
     }
 
-
-
     /********************************************************************************
-     *
      * convertBytesToInt Method converts four bytes to one int number
-     *
      * @param b3 - most significant byte
      * @param b2 - byte2
      * @param b1 - byte1
      * @param b0 - less significant byte
-     *
-     *
      * @return int result of converting
      *******************************************************************************/
     private int convertBytesToInt(byte b3, byte b2, byte b1, byte b0){
-        int i =0;
+        int i;
         i = Byte.toUnsignedInt(b3);
         i = i << 8;
         i += Byte.toUnsignedInt(b2);
@@ -106,8 +86,6 @@ public class ReadIDX {
         i += Byte.toUnsignedInt(b0);
         return i;
     }
-
-
 }
 
 

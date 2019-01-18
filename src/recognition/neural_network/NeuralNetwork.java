@@ -1,18 +1,11 @@
 /**
  * @brief This is class that contains neural network
- *
- *
  * @authors Vladislav Shikhanov
- *****************************************************************************/
-
+ **/
 package recognition.neural_network;
-
 import java.io.*;
 
 public class NeuralNetwork implements Serializable {
-
-
-
     private Layer[] layers;
     private int[] layersSizes;
 
@@ -26,11 +19,9 @@ public class NeuralNetwork implements Serializable {
             System.out.println("Incorrect network size!");
             return;
         }
-
-        this.layers = new Layer[layersSizes.length];
         this.layersSizes = layersSizes;
-
-        this.layers[0] = new Layer(0, layersSizes[0]);
+        layers = new Layer[layersSizes.length];
+        layers[0] = new Layer(0, layersSizes[0]);
 
         for (int i = 1; i < layers.length; i++) {
             this.layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
@@ -54,7 +45,6 @@ public class NeuralNetwork implements Serializable {
         }
     }
 
-
     /**
      * Method recognize what digit is written on given image
      * @param img array with all pixels in image
@@ -70,7 +60,6 @@ public class NeuralNetwork implements Serializable {
             System.out.println("Size of image not matched with neural network input size!!!");
             return -100;
         }
-
         updateNeurons(img);
 
         for (int neuronIndex = 0; neuronIndex < outputLayerSize; neuronIndex++) {
@@ -80,7 +69,6 @@ public class NeuralNetwork implements Serializable {
                 recognizedDigit = neuronIndex;
             }
         }
-
         return recognizedDigit;
     }
 
@@ -134,5 +122,4 @@ public class NeuralNetwork implements Serializable {
     public void setLayers(Layer[] layers) {
         this.layers = layers;
     }
-
 }

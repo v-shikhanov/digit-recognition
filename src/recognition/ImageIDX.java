@@ -1,10 +1,7 @@
 /**
  * @brief This is class contains image and it's real value
- *
- *
  * @authors Vladislav Shikhanov
- *****************************************************************************/
-
+ **/
 package recognition;
 
 public class ImageIDX {
@@ -15,15 +12,14 @@ public class ImageIDX {
      * class constructor
      * @param label- digit that draw on picture
      */
-    ImageIDX (int label){
+    ImageIDX(int label) {
         this.label = label;
     }
-
 
     /**
      *  Method prints image to console
      */
-    public void printImage(){
+    public void printImage() {
         System.out.print("\n");
         System.out.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
         System.out.print(label);
