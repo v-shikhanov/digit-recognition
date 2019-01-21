@@ -83,7 +83,7 @@ public class Layer implements Serializable {
     }
 
     /**
-     * Method casts neurons values to 1 vai sigmoid function
+     * Method casts neurons values to 1 via sigmoid function
      */
     public void castValuesWithSigmoid() {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
@@ -130,7 +130,7 @@ public class Layer implements Serializable {
         }
 
         for (int i = 0; i < values.length; i++) {
-            values[i] = img[i];
+            values[i] = (double)img[i]/255;
         }
     }
 
@@ -145,7 +145,7 @@ public class Layer implements Serializable {
             if (i == digit) {
                 idealOutput = 1;
             }
-            this.idealValues[i] = idealOutput;
+            idealValues[i] = idealOutput;
         }
     }
 
@@ -162,7 +162,7 @@ public class Layer implements Serializable {
             for (int position = 0; position < nextLayer.getIdealOutputsLength(); position++) {
                 idealOutput += nextLayer.getIdealOutput(position) / nextLayer.getWeight(position, neuronIndex);
             }
-            this.idealValues[neuronIndex] = idealOutput/nextLayerSize;
+            idealValues[neuronIndex] = idealOutput/nextLayerSize;
         }
     }
 
