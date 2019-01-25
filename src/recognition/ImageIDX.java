@@ -35,7 +35,6 @@ public class ImageIDX {
             }
         }
     }
-
     /*
         Getters and Setters
     */

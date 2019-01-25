@@ -54,10 +54,9 @@ public class Training {
         findIdealOutputs(digit);
 
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
-            double[] prevLayerValues = layers[layerIndex-1].getValues();
-            layers[layerIndex].updateValues(prevLayerValues);
-            layers[layerIndex].castValuesWithSigmoid();
-            layers[layerIndex].updateDeltaWights(educationSpeed,prevLayerValues);
+            Layer prevLayer = layers[layerIndex-1];
+            layers[layerIndex].updateValues(prevLayer);
+            layers[layerIndex].updateDeltaWights(educationSpeed,prevLayer);
         }
     }
 
@@ -80,7 +79,7 @@ public class Training {
         layers[layers.length-1].setIdealValues(digit);
 
         for (int layerIndex = layers.length -2; layerIndex > 0; layerIndex--) {
-            layers[layerIndex].setIdealOutputs(layers[layerIndex+1]);
+            layers[layerIndex].findIdealOutputs(layers[layerIndex+1]);
         }
     }
 }

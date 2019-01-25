@@ -24,13 +24,13 @@ public class NeuralNetwork implements Serializable {
         layers[0] = new Layer(0, layersSizes[0]);
 
         for (int i = 1; i < layers.length; i++) {
-            this.layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+            layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
         }
 
         File savedNeurons = new File("neurons.tmp");
         if (!savedNeurons.isFile()) {
             for (int i = 1; i < layers.length; i++) {
-                this.layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+                layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
             }
             return;
         }
@@ -80,8 +80,7 @@ public class NeuralNetwork implements Serializable {
         layers[0].mountImageToLayer(img);
 
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
-            double[] prevLayerValues = layers[layerIndex-1].getValues();
-            layers[layerIndex].updateValues(prevLayerValues);
+            layers[layerIndex].updateValues(layers[layerIndex-1]);
         }
     }
 
@@ -111,7 +110,6 @@ public class NeuralNetwork implements Serializable {
             e.printStackTrace();
         }
     }
-
     /*
         Getters and setters
      */

@@ -19,10 +19,9 @@ public class Layer implements Serializable {
     private double[][] weights;
 
     /**
-     * here stored values casted to 1 via sigmoid function
-     * using in training process
+     * here stored biases, that using for find values of neurons
      */
-    private double[] castedValues;
+    private double bias;
 
     /**
      * here stored ideal values for layer neurons
@@ -43,9 +42,8 @@ public class Layer implements Serializable {
      */
     public Layer(int prevLayerSize, int layerSize) {
         values = new double[layerSize];
-        castedValues = new double[layerSize];
+        bias = 1;
         idealValues = new double[layerSize];
-        weights = new double[layerSize][prevLayerSize]; //neuron number and it's connection to prev layer
         deltaWeights = new double[layerSize][prevLayerSize];
 
         initWeights(prevLayerSize, layerSize);
@@ -57,10 +55,11 @@ public class Layer implements Serializable {
      * @param layerSize quantity of neurons in this layer
      */
     private void initWeights(int prevLayerSize, int layerSize) {
+        weights = new double[layerSize][prevLayerSize]; //neuron number and it's connection to prev layer
         Random rand = new Random();
         for (int neuronIndex = 0; neuronIndex < layerSize; neuronIndex++) {
             for (int inputNeuronIndex = 0; inputNeuronIndex < prevLayerSize; inputNeuronIndex++) {
-                this.weights[neuronIndex][inputNeuronIndex] = rand.nextDouble();
+                weights[neuronIndex][inputNeuronIndex] = rand.nextDouble();
             }
         }
     }
@@ -69,25 +68,17 @@ public class Layer implements Serializable {
      * This method counts values of neurons depending on input weights and layer
      * @param inputLayer values of neurons in input layer
      */
-    public void updateValues(double[] inputLayer) {
-        if (inputLayer.length != weights[1].length) {
+    public void updateValues(Layer inputLayer) {
+        if (inputLayer.getValues().length != weights[1].length) {
             System.out.println("Incorrect Layer Length! updateValues-er");
         }
 
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
-            values[neuronIndex] = 0;
-            for (int inputNeuronIndex = 0; inputNeuronIndex < inputLayer.length; inputNeuronIndex++) {
-                values[neuronIndex] += weights[neuronIndex][inputNeuronIndex]*inputLayer[inputNeuronIndex];
+            values[neuronIndex] = inputLayer.getBias();
+            for (int inputNeuronIndex = 0; inputNeuronIndex < inputLayer.getValues().length; inputNeuronIndex++) {
+                values[neuronIndex] += weights[neuronIndex][inputNeuronIndex]*inputLayer.getValues()[inputNeuronIndex];
             }
-        }
-    }
-
-    /**
-     * Method casts neurons values to 1 via sigmoid function
-     */
-    public void castValuesWithSigmoid() {
-        for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
-            castedValues[neuronIndex] = 1 / (1 + Math.exp(- values[neuronIndex]));
+            values[neuronIndex] = 1 / (1 + Math.exp(- values[neuronIndex]));
         }
     }
 
@@ -96,11 +87,11 @@ public class Layer implements Serializable {
      * @param educationSpeed education speed coefficient
      * @param inputLayer values of neurons in previous layer
      */
-    public void updateDeltaWights(double educationSpeed, double[] inputLayer) {
+    public void updateDeltaWights(double educationSpeed, Layer inputLayer) {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
-            for (int inputNeuronIndex = 0; inputNeuronIndex < inputLayer.length; inputNeuronIndex++) {
+            for (int inputNeuronIndex = 0; inputNeuronIndex < inputLayer.getValues().length; inputNeuronIndex++) {
                 deltaWeights[neuronIndex][inputNeuronIndex] +=
-                        educationSpeed * inputLayer[inputNeuronIndex] * (idealValues[neuronIndex] - castedValues[neuronIndex]);
+                        educationSpeed * inputLayer.getValues()[inputNeuronIndex] * (idealValues[neuronIndex] - values[neuronIndex]);
             }
         }
     }
@@ -154,18 +145,24 @@ public class Layer implements Serializable {
      * Using for hidden layers
      * @param nextLayer is layer that is next to this one for example last layer for pre-last hidden layer.
      */
-    public void setIdealOutputs(Layer nextLayer) {
+    public void findIdealOutputs(Layer nextLayer) {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
-            double idealOutput = 0;
             int nextLayerSize = nextLayer.getIdealOutputsLength();
+            double idealOutput = 0;
 
             for (int position = 0; position < nextLayer.getIdealOutputsLength(); position++) {
                 idealOutput += nextLayer.getIdealOutput(position) / nextLayer.getWeight(position, neuronIndex);
             }
+
             idealValues[neuronIndex] = idealOutput/nextLayerSize;
+
+            if (idealValues[neuronIndex] > 1) {
+                idealValues[neuronIndex] = 1;
+            } else if (idealValues[neuronIndex] < 0) {
+                idealValues[neuronIndex] = 0;
+            }
         }
     }
-
     /*
      * getters and setters
      */
@@ -183,5 +180,9 @@ public class Layer implements Serializable {
 
     public double[] getValues() {
         return values;
+    }
+
+    public double getBias() {
+        return bias;
     }
 }

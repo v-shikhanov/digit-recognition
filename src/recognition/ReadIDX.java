@@ -67,14 +67,14 @@ public class ReadIDX {
         return col;
     }
 
-    /********************************************************************************
+    /**
      * convertBytesToInt Method converts four bytes to one int number
      * @param b3 - most significant byte
      * @param b2 - byte2
      * @param b1 - byte1
      * @param b0 - less significant byte
      * @return int result of converting
-     *******************************************************************************/
+     **/
     private int convertBytesToInt(byte b3, byte b2, byte b1, byte b0){
         int i;
         i = Byte.toUnsignedInt(b3);

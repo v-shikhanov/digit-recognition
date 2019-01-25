@@ -15,15 +15,16 @@ public class ImagesRecognition {
     private ArrayList<ImageIDX> testCol;
     private Training training;
     private  Scanner scanner = new Scanner(System.in);
+    private static final double educationSpeed = 0.5;
 
     /**
      * class constructor
      */
     ImagesRecognition() {
         int[] networkSizes = {784, 10};
-        this.neuralNetwork = new NeuralNetwork(networkSizes);
-        this.testCol = new ArrayList<>();
-        this.training = new Training();
+        neuralNetwork = new NeuralNetwork(networkSizes);
+        testCol = new ArrayList<>();
+        training = new Training();
 
         File testImages = new File("t10k-images.idx3-ubyte");
         File testLabels = new File("t10k-labels.idx1-ubyte");
@@ -43,7 +44,7 @@ public class ImagesRecognition {
                 "3 = Learning to goal\n");
 
         switch (enteringMethod) {
-            case 0 : learn(0.5); break;
+            case 0 : learn(educationSpeed); break;
 
             case 1 : recognizeRandomImage(); break;
 
@@ -75,7 +76,7 @@ public class ImagesRecognition {
 
         if (img.getLabel() != recognizedDigit) {
             System.out.println("Recognized incorrect, going learning!");
-            learn(0.5);
+            learn(educationSpeed);
         }
     }
 
@@ -105,7 +106,6 @@ public class ImagesRecognition {
     private void learnToGoal() {
         int tryNumber = 0;
         double accuracy;
-        double educationSpeed;
         double goal = getNumber(0, 100,
                 "Please, insert prediction accuracy learning goal in percent");
         int maxAttempts = (int)getNumber(1, Integer.MAX_VALUE,
@@ -113,19 +113,15 @@ public class ImagesRecognition {
         int learnsBetweenChecks = (int)getNumber(1, Integer.MAX_VALUE,
                 "Please, insert number of learning cycles between accuracy checks");
 
-        System.out.println("Accuracy check before learning : ");
-        educationSpeed = findEducationSpeed(checkAccuracy());
-
         while (true) {
             System.out.println("Learning try number " + tryNumber + " with " + learnsBetweenChecks + " learning" +
-                    " cycles in one try with " + educationSpeed + " education speed was started \n");
+                    " cycles in one try was started \n");
 
             for (int i = 0; i < learnsBetweenChecks; i++) {
                 learn(educationSpeed);
             }
 
             accuracy = checkAccuracy();
-            educationSpeed = findEducationSpeed(accuracy);
 
             if (accuracy > goal) {
                 System.out.println("Learning reached goal, number of learning cycles is " + tryNumber * learnsBetweenChecks);
@@ -160,20 +156,5 @@ public class ImagesRecognition {
             }
         }
         return number;
-    }
-
-    /**
-     * Method defines education speed depending on current prediction accuracy
-     * @param accuracy prediction accuracy in percent
-     * @return speed coefficient
-     */
-    private double findEducationSpeed (double accuracy) {
-        if (accuracy < 40) {
-            return 50;
-        } else {
-            accuracy -= 40;
-            double degree = -5 + accuracy * 0.1;
-            return 1 / Math.pow(2, degree);
-        }
     }
 }
