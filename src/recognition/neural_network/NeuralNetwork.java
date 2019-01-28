@@ -8,6 +8,7 @@ import java.io.*;
 public class NeuralNetwork implements Serializable {
     private Layer[] layers;
     private int[] layersSizes;
+    private String pathname = "NeuralNetwork";
 
     /**
      * Constructor for neural network, load it from file if it exists
@@ -21,17 +22,17 @@ public class NeuralNetwork implements Serializable {
         }
         this.layersSizes = layersSizes;
         layers = new Layer[layersSizes.length];
-        layers[0] = new Layer(0, layersSizes[0]);
-
-        for (int i = 1; i < layers.length; i++) {
-            layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+        for (int layersSize : layersSizes) {
+            pathname = pathname.concat(Integer.toString(layersSize));
         }
+        pathname = pathname.concat(".tmp");
 
-        File savedNeurons = new File("neurons.tmp");
+        File savedNeurons = new File(pathname);
         if (!savedNeurons.isFile()) {
-            for (int i = 1; i < layers.length; i++) {
-                layers[i] = new Layer(layersSizes[i-1], layersSizes[i]);
+            for (int i = 0; i < layers.length -1; i++) {
+                layers[i] = new Layer(layersSizes[i], layersSizes[i+1]);
             }
+            layers[layers.length -1] = new Layer(layersSizes[layersSizes.length-1], 0);
             return;
         }
 
@@ -80,7 +81,7 @@ public class NeuralNetwork implements Serializable {
         layers[0].mountImageToLayer(img);
 
         for (int layerIndex = 1; layerIndex < layers.length; layerIndex++) {
-            layers[layerIndex].updateValues(layers[layerIndex-1]);
+            layers[layerIndex].findValues(layers[layerIndex-1]);
         }
     }
 
@@ -88,7 +89,7 @@ public class NeuralNetwork implements Serializable {
      * method saves neural network to file
      */
     public void save() {
-        File savedNeurons = new File("neurons.tmp");
+        File savedNeurons = new File(pathname);
         if (!savedNeurons.isFile()) {
             try {
                 savedNeurons.createNewFile();

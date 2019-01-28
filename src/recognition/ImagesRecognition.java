@@ -15,13 +15,13 @@ public class ImagesRecognition {
     private ArrayList<ImageIDX> testCol;
     private Training training;
     private  Scanner scanner = new Scanner(System.in);
-    private static final double educationSpeed = 0.5;
+    private static final double educationSpeed = 0.8;
 
     /**
      * class constructor
      */
     ImagesRecognition() {
-        int[] networkSizes = {784, 10};
+        int[] networkSizes = {784, 16, 10};
         neuralNetwork = new NeuralNetwork(networkSizes);
         testCol = new ArrayList<>();
         training = new Training();
@@ -36,16 +36,13 @@ public class ImagesRecognition {
      * This is method for selecting action with neural network- trying to recognise image, or learn network
      */
     public void selectEnteringMethod() {
-        int enteringMethod = (int)getNumber(0, 3,
-                "\n\nPlease select operation: " +
-                "\n0 = Learning,\n" +
-                "1 = Random image,\n" +
-                "2 = Prediction accuracy check\n" +
-                "3 = Learning to goal\n");
+        int enteringMethod = (int)getNumber(1, 3,
+                "\n\nPlease select operation: \n" +
+                "1 = Random image recognition,\n" +
+                "2 = Prediction accuracy check,\n" +
+                "3 = Learning to goal.\n");
 
         switch (enteringMethod) {
-            case 0 : learn(educationSpeed); break;
-
             case 1 : recognizeRandomImage(); break;
 
             case 2 : checkAccuracy(); break;
@@ -55,12 +52,12 @@ public class ImagesRecognition {
     }
 
     /**
-     * That is method makes one learning cycle for neural network. (One learning with 60000 images)
-     * @param educationSpeed-is coefficient to control how strongly could weights deviate from current values
-     *                      should be bigger for higher learning speed and less for higher accuracy of weights correction
+     * That is method makes one learning cycle for neural network.
+     * @param mode is mode if learning - by Delta algorithm or Back propagation
+     * @param trainSize is a size of training collection. 0 for full use.
      */
-    private void learn(double educationSpeed) {
-        neuralNetwork.setLayers(training.train(neuralNetwork.getLayers(), educationSpeed));
+    private void learn(Training.mode mode, int trainSize) {
+        neuralNetwork.setLayers(training.train(neuralNetwork.getLayers(), educationSpeed, trainSize, mode));
         neuralNetwork.save();
     }
 
@@ -76,7 +73,7 @@ public class ImagesRecognition {
 
         if (img.getLabel() != recognizedDigit) {
             System.out.println("Recognized incorrect, going learning!");
-            learn(educationSpeed);
+            learn(Training.mode.BACKPROP, 1000);
         }
     }
 
@@ -113,12 +110,25 @@ public class ImagesRecognition {
         int learnsBetweenChecks = (int)getNumber(1, Integer.MAX_VALUE,
                 "Please, insert number of learning cycles between accuracy checks");
 
+        int trainColSize = (int)getNumber(0, 60000,
+                "Please, insert size(1-60000) of learning collection for one learning cycle." +
+                        " 0 For full 60000 collection use");
+
+        Training.mode mode;
+
+        if (getNumber(0, 1,
+                "Please, insert learning mode 0- for Delta mode, 1- for Back propagation mode") == 0) {
+            mode = Training.mode.DELTA;
+        } else {
+            mode = Training.mode.BACKPROP;
+        }
+
         while (true) {
             System.out.println("Learning try number " + tryNumber + " with " + learnsBetweenChecks + " learning" +
                     " cycles in one try was started \n");
 
             for (int i = 0; i < learnsBetweenChecks; i++) {
-                learn(educationSpeed);
+                learn(mode, trainColSize);
             }
 
             accuracy = checkAccuracy();
