@@ -1,6 +1,6 @@
 /**
  * @brief This is class contains image and it's real value
- * @authors Vladislav Shikhanov
+ * @author Vladislav Shikhanov
  **/
 package recognition;
 
@@ -9,7 +9,7 @@ public class ImageIDX {
     private int[] pixels = new int[784];
 
     /**
-     * class constructor
+     * Class constructor
      * @param label- digit that draw on picture
      */
     ImageIDX(int label) {
@@ -20,7 +20,6 @@ public class ImageIDX {
      *  Method prints image to console
      */
     public void printImage() {
-        System.out.print("\n");
         System.out.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
         System.out.print(label);
         for ( int index = 1; index <= 784; index++){

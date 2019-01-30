@@ -1,6 +1,6 @@
 /**
  * @brief Here is wrapper class (reader) for IDX files.
- * @authors Vladislav Shikhanov
+ * @author Vladislav Shikhanov
  **/
 package recognition;
 import java.io.*;

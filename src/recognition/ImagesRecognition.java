@@ -1,11 +1,10 @@
 /**
  * @brief This is class for control images recognition
- * @authors Vladislav Shikhanov
+ * @author Vladislav Shikhanov
  **/
 package recognition;
 import recognition.neural_network.NeuralNetwork;
 import recognition.training.TrainingDispatcher;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,10 +18,10 @@ public class ImagesRecognition {
     private static final double educationSpeed = 0.8;
 
     /**
-     * class constructor
+     * Class constructor
      */
     ImagesRecognition() {
-        int[] networkSizes = {784, 16, 12, 10};
+        int[] networkSizes = {784, 16, 16, 10};
         neuralNetwork = new NeuralNetwork(networkSizes);
         testCol = new ArrayList<>();
         trainingDispatcher = new TrainingDispatcher(neuralNetwork.getLayers());
@@ -37,12 +36,11 @@ public class ImagesRecognition {
      * This is method for selecting action with neural network- trying to recognise image, or learn network
      */
     public void selectEnteringMethod() {
-//        int enteringMethod = (int)getNumber(1, 3,
-//                "\n\nPlease select operation: \n" +
-//                "1 = Random image recognition,\n" +
-//                "2 = Prediction accuracy check,\n" +
-//                "3 = Learning to goal.\n");
-        int enteringMethod =  3;
+        int enteringMethod = (int)getNumber(1, 3,
+                "\n\nPlease select operation: \n" +
+                "1 = Random image recognition,\n" +
+                "2 = Prediction accuracy check,\n" +
+                "3 = Learning to goal.\n");
 
         switch (enteringMethod) {
             case 1 : recognizeRandomImage(); break;
@@ -54,13 +52,13 @@ public class ImagesRecognition {
     }
 
     /**
-     * That is method makes one learning cycle for neural network.
-     * @param mode is mode if learning - by Delta algorithm or Back propagation
-     * @param trainSize is a size of trainingDispatcher collection. 0 for full use.
+     * Method makes one learning cycle for neural network.
+     * @param mode is mode if learning - Delta algorithm or Back propagation
+     * @param trainSize is a size of training set(formed by training collection with 60000 images). 0 for full use.
      */
     private void learn(TrainingDispatcher.mode mode, int trainSize) {
         neuralNetwork.setLayers(trainingDispatcher.train(neuralNetwork.getLayers(), educationSpeed, trainSize, mode));
-       // neuralNetwork.save();
+        neuralNetwork.save();
     }
 
     /**
@@ -99,26 +97,22 @@ public class ImagesRecognition {
     }
 
     /**
-     *  method completes learning cycles and trying to reach goal of accuracy for neural network.
+     *  Method completes learning cycles and trying to reach goal of accuracy for neural network.
      *  User can set accuracy in percents, max number of attempts and number of learning cycles in one attempt
      */
     private void learnToGoal() {
         int tryNumber = 0;
         double accuracy;
-//        double goal = getNumber(0, 100,
-////                "Please, insert prediction accuracy learning goal in percent");
-////        int maxAttempts = (int)getNumber(1, Integer.MAX_VALUE,
-////                "Please, insert max tryings in learning process");
-////        int learnsBetweenChecks = (int)getNumber(1, Integer.MAX_VALUE,
-////                "Please, insert number of learning cycles between accuracy checks");
-////
-////        int trainColSize = (int)getNumber(0, 60000,
-////                "Please, insert size(1-60000) of learning collection for one learning cycle." +
-////                        " 0 For full 60000 collection use");
-        double goal = 99;
-        int maxAttempts = 20;
-        int learnsBetweenChecks = 99;
-        int trainColSize = 99;
+        double goal = getNumber(0, 100,
+                "Please, insert prediction accuracy learning goal in percent");
+        int maxAttempts = (int)getNumber(1, Integer.MAX_VALUE,
+                "Please, insert max tryings in learning process");
+        int learnsBetweenChecks = (int)getNumber(1, Integer.MAX_VALUE,
+                "Please, insert number of learning cycles between accuracy checks");
+
+        int trainColSize = (int)getNumber(0, 60000,
+                "Please, insert size(1-60000) of learning collection for one learning cycle." +
+                        " 0 For full 60000 collection use");
 
         TrainingDispatcher.mode mode;
 

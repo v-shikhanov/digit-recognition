@@ -1,6 +1,6 @@
 /**
- * @brief This is class that contains neural network
- * @authors Vladislav Shikhanov
+ * @brief This class contains neural network
+ * @author Vladislav Shikhanov
  **/
 package recognition.neural_network;
 import java.io.*;
@@ -86,7 +86,7 @@ public class NeuralNetwork implements Serializable {
     }
 
     /**
-     * method saves neural network to file
+     * Method saves neural network to file
      */
     public void save() {
         File savedNeurons = new File(pathname);

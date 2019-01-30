@@ -1,33 +1,31 @@
 /**
- * @brief This is class that contains layer of neural network
- * @authors Vladislav Shikhanov
+ * @brief This class contains one layer of neural network
+ * @author Vladislav Shikhanov
  **/
 package recognition.neural_network;
-
 import java.io.Serializable;
 import java.util.Random;
 
 public class Layer implements Serializable {
     /**
-     * here stored values of neurons
-     * which are set from outside for input layer and count for other
+     * Here stored values of neurons
      */
     private double[] values;
 
     /**
-     * here stored weights, points from current layer neuron to next layer neuron
+     * Here stored weights, points from current layer neuron to next layer neuron
      */
     private double[][] weights;
 
     /**
-     * here stored biases, that using for find values of neurons
+     * Here stored biases, that using for find values of neurons
      */
     private double bias;
 
     /**
      * Constructor for layer of neural network
-     * @param nextLayerSize quantity of neurons in the next layer
      * @param layerSize quantity of neurons in this layer
+     * @param nextLayerSize quantity of neurons in the next layer
      */
     public Layer(int layerSize, int nextLayerSize) {
         values = new double[layerSize];
@@ -36,7 +34,7 @@ public class Layer implements Serializable {
     }
 
     /**
-     * Method initialise weights with random numbers
+     * Method initialises weights with random numbers by Gaussian distribution
      * @param nextLayerSize quantity of neurons in next layer
      * @param layerSize quantity of neurons in this layer
      */
@@ -44,15 +42,15 @@ public class Layer implements Serializable {
         weights = new double[layerSize][nextLayerSize];
         Random rand = new Random();
         for (int neuronIndex = 0; neuronIndex < layerSize; neuronIndex++) {
-            for (int inputNeuronIndex = 0; inputNeuronIndex < nextLayerSize; inputNeuronIndex++) {
-                weights[neuronIndex][inputNeuronIndex] = rand.nextGaussian();
+            for (int boundNeuronIndex = 0; boundNeuronIndex < nextLayerSize; boundNeuronIndex++) {
+                weights[neuronIndex][boundNeuronIndex] = rand.nextGaussian();
             }
         }
     }
 
     /**
-     * This method counts values of neurons depending on input weights and layer
-     * @param inputLayer content of layer previous to current one
+     * This method counts values of neurons depending on input weights and previous layer
+     * @param inputLayer contents previous layer for current one
      */
     public void findValues(Layer inputLayer) {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
@@ -67,8 +65,8 @@ public class Layer implements Serializable {
 
     /**
      * Method calculate mean weight value and add it to weight. Delta weights are reset to next learning cycle
-     * @param divider it's a number of add delta weights during learning cycle.(to get mean val)
-     *               (w1+w2+w3)/3 -3 is divider.
+     * @param delta is an array of delta weights values to which should be corrected weights of layer
+     * @param divider sizes of images collection used for delta weights get
      */
     public void correctWeights(double[][] delta, int divider) {
         for (int neuronIndex = 0; neuronIndex < values.length; neuronIndex++) {
