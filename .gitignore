@@ -28,3 +28,7 @@ git.properties
 
 #IDEA Project Files
 .idea/
+
+# Dataset files
+*.txt
+*.tmp
