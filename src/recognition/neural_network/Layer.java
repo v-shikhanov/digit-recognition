@@ -8,17 +8,17 @@ import java.util.Random;
 
 public class Layer implements Serializable {
     /**
-     * Here stored values of neurons
+     * Here storing values of neurons
      */
     private double[] values;
 
     /**
-     * Here stored weights, points from current layer neuron to next layer neuron
+     * Here storing weights, points from current layer neuron to next layer neuron
      */
     private double[][] weights;
 
     /**
-     * Here stored biases, that using for find values of neurons
+     * Here storing biases, that using for find values of neurons
      */
     private double bias;
 
@@ -92,7 +92,7 @@ public class Layer implements Serializable {
         }
     }
     /*
-     * getters and setters
+     * Getters and setters
      */
     public int  getLayerSize() {
         return values.length;

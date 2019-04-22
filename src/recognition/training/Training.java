@@ -5,6 +5,7 @@
 package recognition.training;
 import recognition.neural_network.Layer;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Training {
     /**
@@ -14,7 +15,7 @@ public abstract class Training {
     /**
      * Is an array of delta weights values to which should be corrected weights of layer
      */
-    protected ArrayList<double[][]> deltaWeights;
+    protected List<double[][]> deltaWeights;
 
     /**
      * Class constructor
@@ -74,7 +75,7 @@ public abstract class Training {
     /*
        Getters and setters
      */
-    public ArrayList<double[][]> getDeltaWeights() {
+    public List<double[][]> getDeltaWeights() {
         return deltaWeights;
     }
 }

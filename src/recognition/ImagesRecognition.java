@@ -7,21 +7,22 @@ import recognition.neural_network.NeuralNetwork;
 import recognition.training.TrainingDispatcher;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 public class ImagesRecognition {
     private NeuralNetwork neuralNetwork;
-    private ArrayList<ImageIDX> testCol;
+    private List<ImageIDX> testCol;
     private TrainingDispatcher trainingDispatcher;
-    private  Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
     private static final double educationSpeed = 0.8;
-
+    private static final int[] networkSizes = {784, 10};
     /**
      * Class constructor
      */
     ImagesRecognition() {
-        int[] networkSizes = {784, 16, 16, 10};
+        scanner = new Scanner(System.in);
         neuralNetwork = new NeuralNetwork(networkSizes);
         testCol = new ArrayList<>();
         trainingDispatcher = new TrainingDispatcher(neuralNetwork.getLayers());
@@ -62,8 +63,8 @@ public class ImagesRecognition {
     }
 
     /**
-     *  Method that selects random image from test collection and trying to recognize it. Going learning in case of
-     *  incorrect result
+     * Method that selects random image from test collection and trying to recognize it. Going learning in case of
+     * incorrect result
      */
     private void recognizeRandomImage() {
         ImageIDX img = testCol.get(new Random().nextInt(testCol.size()));
@@ -78,7 +79,7 @@ public class ImagesRecognition {
     }
 
     /**
-     * That method for recognise every image in test collection and define accuracy  of recognition
+     * This method for recognise every image in test collection and define accuracy of recognition
      * @return accuracy in percents
      */
     private double checkAccuracy() {
@@ -97,8 +98,8 @@ public class ImagesRecognition {
     }
 
     /**
-     *  Method completes learning cycles and trying to reach goal of accuracy for neural network.
-     *  User can set accuracy in percents, max number of attempts and number of learning cycles in one attempt
+     * Method completes learning cycles and trying to reach goal of accuracy for neural network.
+     * User can set accuracy in percents, max number of attempts and number of learning cycles in one attempt
      */
     private void learnToGoal() {
         int tryNumber = 0;

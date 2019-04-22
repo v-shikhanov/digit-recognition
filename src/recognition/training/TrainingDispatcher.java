@@ -8,6 +8,7 @@ import recognition.ReadIDX;
 import recognition.neural_network.Layer;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TrainingDispatcher {
@@ -17,17 +18,17 @@ public class TrainingDispatcher {
     /**
      * Collection of images using for training process
      */
-    private ArrayList<ImageIDX> trainingCol;
+    private List<ImageIDX> trainingCol;
 
     /**
      * Is a set of images from training collection for fastest learning
      */
-    private ArrayList<ImageIDX> trainingSet;
+    private List<ImageIDX> trainingSet;
 
     /**
      * Delta values for network weights correction which are found by back propagation or delta algorithm
      */
-    private ArrayList<double[][]> deltaWeights;
+    private List<double[][]> deltaWeights;
 
     /**
      * For selection of learning mode

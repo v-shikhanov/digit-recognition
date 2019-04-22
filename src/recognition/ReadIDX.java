@@ -5,12 +5,13 @@
 package recognition;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReadIDX {
     /**
      * updateCollection Method updates collection with read images
      *
-     * It use two files - one with labels to images (1- for image with draw of one)
+     * It uses two files - one with labels to images (1- for image with draw of one)
      * the second one contains images which are represented like matrix 28*28 where
      * every element is a gradation of gray in current pixel 0-white, 255 black.
      *
@@ -21,8 +22,8 @@ public class ReadIDX {
      *
      * @return collection of images
      **/
-    public ArrayList<ImageIDX> updateCollection(File labels, File images) {
-        ArrayList<ImageIDX> col = new ArrayList<>();
+    public List<ImageIDX> updateCollection(File labels, File images) {
+        List<ImageIDX> col = new ArrayList<>();
         byte[] labelsData = new byte[0];
         byte[] imagesData = new byte[0];
         int labelsIndex = 8;

@@ -5,12 +5,13 @@
 package recognition.training;
 import recognition.neural_network.Layer;
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class DeltaTraining extends Training {
     /**
      * Ideal values which are set depending on input image for every neuron in neural network
      */
-    private ArrayDeque<double[]> idealValues;
+    private Deque<double[]> idealValues;
 
     /**
      * Class constructor

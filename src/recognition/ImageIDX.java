@@ -17,7 +17,7 @@ public class ImageIDX {
     }
 
     /**
-     *  Method prints image to console
+     * Method prints image to console
      */
     public void printImage() {
         System.out.print("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
@@ -35,7 +35,7 @@ public class ImageIDX {
         }
     }
     /*
-        Getters and Setters
+      Getters and Setters
     */
     public int getLabel() {
         return label;

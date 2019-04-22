@@ -5,6 +5,7 @@
 package recognition.training;
 import recognition.neural_network.Layer;
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class BackPropTraining extends Training{
     /**
@@ -15,7 +16,7 @@ public class BackPropTraining extends Training{
     /**
      * Errors values which are counts for every neuron in network, counted depending on input image
      */
-    private ArrayDeque<double[]> errors;
+    private Deque<double[]> errors;
 
     /**
      * Class constructor

@@ -47,7 +47,7 @@ public class NeuralNetwork implements Serializable {
     }
 
     /**
-     * Method recognize what digit is written on given image
+     * Method recognize what digit written on given image
      * @param img array with all pixels in image
      * @return digit which was written on image
      */
@@ -112,7 +112,7 @@ public class NeuralNetwork implements Serializable {
         }
     }
     /*
-        Getters and setters
+       Getters and setters
      */
     public Layer[] getLayers() {
         return layers;
